@@ -5,27 +5,328 @@
   <link href='https://fonts.googleapis.com/css?family=Noto Serif Devanagari' rel='stylesheet'>
 </head>
 <body>
-    <div class="nav">
-  <div class="nav-header">
-    <div class="nav-title">
-      JoGeek
+  <div id="container">
+    <div class="BOX">
+      <div id="RomToDev" class="tabcontent">
+        <br>
+        <br>
+        <textarea id="romin" rows="5" cols="50" placeholder="Type or paste transliteration text into this box. Devanāgarī will appear in the box below.
+e.g. akSharaM ahaM puruShottama daaso&#39;smi" oninput="toDevanagari()" spellcheck="false"></textarea>
+      </div>
+      <div id="OutputPlaceholder" class="tabcontent">
+        <textarea id="devout" rows="5" cols="50" placeholder="Devanāgarī will appear in this box when transliteration is typed or pasted in the box above.
+e.g. अक्षरं अहं पुरुषोत्तम दासोऽस्मि" readonly></textarea>
+      </div>
     </div>
   </div>
-  <div class="nav-btn">
-    <label for="nav-check">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
   </div>
-  
-  <div class="nav-links">
-    <a href="//github.io/jo_geek" target="_blank">Github</a>
-    <a href="http://stackoverflow.com/users/4084003/" target="_blank">Stackoverflow</a>
-    <a href="https://in.linkedin.com/in/jonesvinothjoseph" target="_blank">LinkedIn</a>
-    <a href="https://codepen.io/jo_Geek/" target="_blank">Codepen</a>
-    <a href="https://jsfiddle.net/user/jo_Geek/" target="_blank">JsFiddle</a>
+  <hr>
+  <div>
+    <h3>Sanity Test Sequence</h3>
   </div>
-</div>
+  <div>
+    <h4>1 2 3 4 5 6 7 8 9 0 -----
+      OM (a) a (A) aa i ii u uu (E) (e) e ai (O) (o) o au aM aH -r -ri -l -li ' (oe) (ooe) aw (ue) (uue) -----
+      ka(nM) kaMM kaM kaH k(oe) k(ooe) ka. kaa ki kii ku kuu k-r k-ri k(E) k(e) ke kai k(O) k(o) ko kau k(&lt;e) kaw k(u-) k(ue) k(uue) k-l k-li -----
+      k kh g gh G ch Ch j jh J T Th D Dh N t th d da n p ph b bh m y Y r l L v sh Sh s h | || ----- ka^(`) ka^(\) ka^(/) ka^(0) ka^(1) ka^(2) ka^(3) ka^(4) ka^(5) ka^(6) ka^(7) ka^(8) ka^(9) ka^(a) ka^(U) ka^(ka) ka^(na) ka^(pa) ka^(ra) ka^(vi) ka^(') ka^(v) ka^(_) ka^(^) ka^(^`) ka^(-) ka^(//) ka^(``) ka^(```) ka^(c) ka^(u) ka^(o) ka^(oo) ----- ka*(o) ka*(.) ka*(u.) ka*(u.\) ka*(u.u.\) ka*(u.2) ka*(u.3) ka*(u.') ka*(Ch) ka*(cq) ka*(-) ka*(S) kaH*(--) kaH*(^&gt;) kaH*(^&lt;) kaH*(_&lt;) kaH*(_&gt;) ka*(^s) ka*(_s) ka*(pq) ka*(qp) ka*(qq) ka*(qq,) ka*(E.) ka*(c.6) ka*(Th.) ka*(S:) ka*(un) ka*(x) ka*(X) ka*(wm) ka*(r) ka*(pqpq) ----- ka_(-) ka_(w) ka_(L) ka_(c) ka_(u) ka_(^) ka_(`) ka_(.) ka_(..) ka_(...) ka_(\) ----- 'a 'aa 'i 'ii 'u 'uu</h4>
+  </div>
+  <div>
+    <h3>Rigveda</h3>
+  </div>
+  <div>
+    <h4>a_(-)gnimii^(`)Le pu_(-)rohi^(`)taM ya_(-)jJasya^(`) de_(-)vam-r_(-)tvija^(`)m | hotaa^(`)raM ratna_(-)dhaata^(`)mam ||1||</h4>
+  </div>
+  <div>
+    <h3>Samaveda</h3>
+  </div>
+  <div>
+    <h4>a^(2)gna^(3) aa^(1) yaa^(2)hi vii^(3)ta^(1)ye^(2) g-rNaa^(3)no^(2) ha^(3)vya^(1)daa^(2)taye | ni^(1) hotaa^(2)^(ra) satsi ba^(3)rhi^(1)Shi^(2) ||1||</h4>
+  </div>
+  <div>
+    <h3>Shukla Yajurveda Madhyandina</h3>
+  </div>
+  <div>
+    <h4>i_(u)She tvo_(u)rje tvaa^(`) vaa_(u)yava^(`) stha de_(u)vo vaH*(--)^(`) savi_(u)taa praarpa^(`)yatu_(u) shreShTha^(`)tamaaya_(u) karma^(`)Na_(u) aapyaa^(`)yadhvamaghnyaa_(u)'indraa^(`)ya bhaa_(u)gampra_(u)jaava^(`)tiiranamii_(u)vaa'a^(`)ya_(u)kShmaa maa va^(`) ste_(u)na'ii^(`)shata_(u) maaghasha^(`)*(c.6)so dhru_(u)vaa'a_(u)smingopa^(`)tau syaata ba_(u)hviirYaja^(`)maanasya pa_(u)shuunpaa^(`)hi ||1||</h4>
+  </div>
+  <div>
+    <h3>Krishna Yajurveda Maitrayani</h3>
+  </div>
+  <div>
+    <h4>i_(-)She^(`) tvaa_(L) subhuu_(-)taa^(`)ya_(w) vaa_(-)ya^(`)va_(L) stha de_(-)vo^(`) vaH_(L) savi_(-)taa^(`) praa^(`)rpa_(L)yatu_(-) shre^(`)ShTha_(L)tamaaya_(-) ka^(`)rma_(w)Naa_(-) aa^(`)pyaa_(L)yadhvamaghnyaa de_(-)ve^(`)bhyaa_(-) i^(`)ndraa_(L)ya bhaa_(-)gaM^(`) maa^(`) va_(L) ste_(-)na^(`) ii_(L)shata_(-) maa^(`)gha^(`)sha_(L)*(u.\)so dhru_(-)vaa^(`) a_(-)smi^(`)n go^(`)pa_(L)tau syaata ba_(-)hvii^(`)rya^(`)ja_(L)maanasya pa_(-)shuu^(`)n paa_(L)hi ||1||</h4>
+  </div>
+  <div>
+    <h3>Atharvaveda</h3>
+  </div>
+  <div>
+    <h4>ye tri^(`)Sha_(-)ptaaH pa^(`)ri_(-)yanti_(-) vishvaa^(`) ruu_(-)paaNi_(-) bibhra^(`)taH | vaa_(-)chaspati_(-)rbalaa_(-) teShaaM^(`) ta_(-)nvo_(-)*(r) a_(-)dya da^(`)dhaatu me ||1||</h4>
+  </div>
+
+  <h1>Transliteration Table</h1>
+  <button id="toggleButton">Toggle Table</button>
+  <div class="table-container">
+    <table id="characterTable" style="white-space: nowrap;">
+      <tr>
+        <td></td>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>E</td>
+        <td>F</td>
+      </tr>
+      <tr>
+        <td>U+090x</td>
+        <td title="U+0900: DEVANAGARI SIGN INVERTED CANDRABINDU">ऀ<br>ka(nM)=कऀ</td>
+        <td title="U+0901: DEVANAGARI SIGN CANDRABINDU">ँ<br>kaMM=कँ</td>
+        <td title="U+0902: DEVANAGARI SIGN ANUSVARA">ं<br>kaM=कं</td>
+        <td title="U+0903: DEVANAGARI SIGN VISARGA">ः<br>kaH=कः</td>
+        <td title="U+0904: DEVANAGARI LETTER SHORT A">ऄ<br>(a)=ऄ</td>
+        <td title="U+0905: DEVANAGARI LETTER A">अ<br>a=अ</td>
+        <td title="U+0906: DEVANAGARI LETTER AA">आ<br>aa=आ</td>
+        <td title="U+0907: DEVANAGARI LETTER I">इ<br>i=इ</td>
+        <td title="U+0908: DEVANAGARI LETTER II">ई<br>ii=ई</td>
+        <td title="U+0909: DEVANAGARI LETTER U">उ<br>u=उ</td>
+        <td title="U+090A: DEVANAGARI LETTER UU">ऊ<br>uu=ऊ</td>
+        <td title="U+090B: DEVANAGARI LETTER VOCALIC R">ऋ<br>-r=ऋ</td>
+        <td title="U+090C: DEVANAGARI LETTER VOCALIC L">ऌ<br>-l=ऌ</td>
+        <td title="U+090D: DEVANAGARI LETTER CANDRA E">ऍ<br>(E)=ऍ</td>
+        <td title="U+090E: DEVANAGARI LETTER SHORT E">ऎ<br>(e)=ऎ</td>
+        <td title="U+090F: DEVANAGARI LETTER E">ए<br>e=ए</td>
+      </tr>
+      <tr>
+        <td>U+091x</td>
+        <td title="U+0910: DEVANAGARI LETTER AI">ऐ<br>ai=ऐ</td>
+        <td title="U+0911: DEVANAGARI LETTER CANDRA O">ऑ<br>(O)=ऑ</td>
+        <td title="U+0912: DEVANAGARI LETTER SHORT O">ऒ<br>(o)=ऒ</td>
+        <td title="U+0913: DEVANAGARI LETTER O">ओ<br>o=ओ</td>
+        <td title="U+0914: DEVANAGARI LETTER AU">औ<br>au=औ</td>
+        <td title="U+0915: DEVANAGARI LETTER KA">क<br>k=क्</td>
+        <td title="U+0916: DEVANAGARI LETTER KHA">ख<br>kh=ख्</td>
+        <td title="U+0917: DEVANAGARI LETTER GA">ग<br>g=ग्</td>
+        <td title="U+0918: DEVANAGARI LETTER GHA">घ<br>gh=घ्</td>
+        <td title="U+0919: DEVANAGARI LETTER NGA">ङ<br>G=ङ्</td>
+        <td title="U+091A: DEVANAGARI LETTER CA">च<br>ch=च्</td>
+        <td title="U+091B: DEVANAGARI LETTER CHA">छ<br>Ch=छ्</td>
+        <td title="U+091C: DEVANAGARI LETTER JA">ज<br>j=ज्</td>
+        <td title="U+091D: DEVANAGARI LETTER JHA">झ<br>jh=झ्</td>
+        <td title="U+091E: DEVANAGARI LETTER NYA">ञ<br>J=ञ्</td>
+        <td title="U+091F: DEVANAGARI LETTER TTA">ट<br>T=ट्</td>
+      </tr>
+      <tr>
+        <td>U+092x</td>
+        <td title="U+0920: DEVANAGARI LETTER TTHA">ठ<br>Th=ठ्</td>
+        <td title="U+0921: DEVANAGARI LETTER DDA">ड<br>D=ड्</td>
+        <td title="U+0922: DEVANAGARI LETTER DDHA">ढ<br>Dh=ढ्</td>
+        <td title="U+0923: DEVANAGARI LETTER NNA">ण<br>N=ण्</td>
+        <td title="U+0924: DEVANAGARI LETTER TA">त<br>t=त्</td>
+        <td title="U+0925: DEVANAGARI LETTER THA">थ<br>th=थ्</td>
+        <td title="U+0926: DEVANAGARI LETTER DA">द<br>d=द्</td>
+        <td title="U+0927: DEVANAGARI LETTER DHA">ध<br>dh=ध्</td>
+        <td title="U+0928: DEVANAGARI LETTER NA">न<br>n=न्</td>
+        <td title="U+0929: DEVANAGARI LETTER NNNA">ऩ<br>na.=ऩ</td>
+        <td title="U+092A: DEVANAGARI LETTER PA">प<br>p=प्</td>
+        <td title="U+092B: DEVANAGARI LETTER PHA">फ<br>ph=फ्</td>
+        <td title="U+092C: DEVANAGARI LETTER BA">ब<br>b=ब्</td>
+        <td title="U+092D: DEVANAGARI LETTER BHA">भ<br>bh=भ्</td>
+        <td title="U+092E: DEVANAGARI LETTER MA">म<br>m=म्</td>
+        <td title="U+092F: DEVANAGARI LETTER YA">य<br>y=य्</td>
+      </tr>
+      <tr>
+        <td>U+093x</td>
+        <td title="U+0930: DEVANAGARI LETTER RA">र<br>r=र्</td>
+        <td title="U+0931: DEVANAGARI LETTER RRA">ऱ<br>ra.=ऱ</td>
+        <td title="U+0932: DEVANAGARI LETTER LA">ल<br>l=ल्</td>
+        <td title="U+0933: DEVANAGARI LETTER LLA">ळ<br>L=ळ्</td>
+        <td title="U+0934: DEVANAGARI LETTER LLLA">ऴ<br>La.=ऴ</td>
+        <td title="U+0935: DEVANAGARI LETTER VA">व<br>v=व्</td>
+        <td title="U+0936: DEVANAGARI LETTER SHA">श<br>sh=श्</td>
+        <td title="U+0937: DEVANAGARI LETTER SSA">ष<br>Sh=ष्</td>
+        <td title="U+0938: DEVANAGARI LETTER SA">स<br>s=स्</td>
+        <td title="U+0939: DEVANAGARI LETTER HA">ह<br>h=ह्</td>
+        <td title="U+093A: DEVANAGARI VOWEL SIGN OE">ऺ<br>(oe)=ऺ</td>
+        <td title="U+093B: DEVANAGARI VOWEL SIGN OOE">ऻ<br>(ooe)=ऻ</td>
+        <td title="U+093C: DEVANAGARI SIGN NUKTA">़<br>.=़</td>
+        <td title="U+093D: DEVANAGARI SIGN AVAGRAHA">ऽ<br>'=ऽ</td>
+        <td title="U+093E: DEVANAGARI VOWEL SIGN AA">ा<br>kaa=का</td>
+        <td title="U+093F: DEVANAGARI VOWEL SIGN I">ि<br>ki=कि</td>
+      </tr>
+      <tr>
+        <td>U+094x</td>
+        <td title="U+0940: DEVANAGARI VOWEL SIGN II">ी<br>kii=की</td>
+        <td title="U+0941: DEVANAGARI VOWEL SIGN U">ु<br>ku=कु</td>
+        <td title="U+0942: DEVANAGARI VOWEL SIGN UU">ू<br>kuu=कू</td>
+        <td title="U+0943: DEVANAGARI VOWEL SIGN VOCALIC R">ृ<br>k-r=कृ</td>
+        <td title="U+0944: DEVANAGARI VOWEL SIGN VOCALIC RR">ॄ<br>k-ri=कॄ</td>
+        <td title="U+0945: DEVANAGARI VOWEL SIGN CANDRA E">ॅ<br>k(E)=कॅ</td>
+        <td title="U+0946: DEVANAGARI VOWEL SIGN SHORT E">ॆ<br>k(e)=कॆ</td>
+        <td title="U+0947: DEVANAGARI VOWEL SIGN E">े<br>ke=के</td>
+        <td title="U+0948: DEVANAGARI VOWEL SIGN AI">ै<br>kai=कै</td>
+        <td title="U+0949: DEVANAGARI VOWEL SIGN CANDRA O">ॉ<br>k(O)=कॉ</td>
+        <td title="U+094A: DEVANAGARI VOWEL SIGN SHORT O">ॊ<br>k(o)=कॊ</td>
+        <td title="U+094B: DEVANAGARI VOWEL SIGN O">ो<br>ko=को</td>
+        <td title="U+094C: DEVANAGARI VOWEL SIGN AU">ौ<br>kau=कौ</td>
+        <td title="U+094D: DEVANAGARI SIGN VIRAMA">्</td>
+        <td title="U+094E: DEVANAGARI VOWEL SIGN PRISHTHAMATRA E">ॎ<br>k(&lt;e)=कॎ</td>
+        <td title="U+094F: DEVANAGARI VOWEL SIGN AW">ॏ<br>kaw=कॏ</td>
+      </tr>
+      <tr>
+        <td>U+095x</td>
+        <td title="U+0950: DEVANAGARI OM">ॐ<br>OM=ॐ</td>
+        <td title="U+0951: DEVANAGARI STRESS SIGN UDATTA">॑<br>ka^(`)=क॑</td>
+        <td title="U+0952: DEVANAGARI STRESS SIGN ANUDATTA">॒<br>ka^(-)=क॒</td>
+        <td title="U+0953: DEVANAGARI GRAVE ACCENT">॓<br>ka^(\)=क॓</td>
+        <td title="U+0954: DEVANAGARI ACUTE ACCENT">॔<br>ka^(/)=क॔</td>
+        <td title="U+0955: DEVANAGARI VOWEL SIGN CANDRA LONG E">ॕ<br>ka^(u-)=कॕ</td>
+        <td title="U+0956: DEVANAGARI VOWEL SIGN UE">ॖ<br>k(ue)=कॖ</td>
+        <td title="U+0957: DEVANAGARI VOWEL SIGN UUE">ॗ<br>k(uue)=कॗ</td>
+        <td title="U+0958: DEVANAGARI LETTER QA">क़<br>ka.=क़</td>
+        <td title="U+0959: DEVANAGARI LETTER KHHA">ख़<br>kha.=ख़</td>
+        <td title="U+095A: DEVANAGARI LETTER GHHA">ग़<br>ga.=ग़</td>
+        <td title="U+095B: DEVANAGARI LETTER ZA">ज़<br>ja.=ज़</td>
+        <td title="U+095C: DEVANAGARI LETTER DDDHA">ड़<br>Da.=ड़</td>
+        <td title="U+095D: DEVANAGARI LETTER RHA">ढ़<br>Dha.=ढ़</td>
+        <td title="U+095E: DEVANAGARI LETTER FA">फ़<br>pha.=फ़</td>
+        <td title="U+095F: DEVANAGARI LETTER YYA">य़<br>ya.=य़</td>
+      </tr>
+      <tr>
+        <td>U+096x</td>
+        <td title="U+0960: DEVANAGARI LETTER VOCALIC RR">ॠ<br>-ri=ॠ</td>
+        <td title="U+0961: DEVANAGARI LETTER VOCALIC LL">ॡ<br>-li=ॡ</td>
+        <td title="U+0962: DEVANAGARI VOWEL SIGN VOCALIC L">ॢ<br>k-l=कॢ</td>
+        <td title="U+0963: DEVANAGARI VOWEL SIGN VOCALIC LL">ॣ<br>k-li=कॣ</td>
+        <td title="U+0964: DEVANAGARI DANDA">।<br>|=।</td>
+        <td title="U+0965: DEVANAGARI DOUBLE DANDA">॥<br>||=॥</td>
+        <td title="U+0966: DEVANAGARI DIGIT ZERO">०<br>0=०</td>
+        <td title="U+0967: DEVANAGARI DIGIT ONE">१<br>1=१</td>
+        <td title="U+0968: DEVANAGARI DIGIT TWO">२<br>2=२</td>
+        <td title="U+0969: DEVANAGARI DIGIT THREE">३<br>3=३</td>
+        <td title="U+096A: DEVANAGARI DIGIT FOUR">४<br>4=४</td>
+        <td title="U+096B: DEVANAGARI DIGIT FIVE">५<br>5=५</td>
+        <td title="U+096C: DEVANAGARI DIGIT SIX">६<br>6=६</td>
+        <td title="U+096D: DEVANAGARI DIGIT SEVEN">७<br>7=७</td>
+        <td title="U+096E: DEVANAGARI DIGIT EIGHT">८<br>8=८</td>
+        <td title="U+096F: DEVANAGARI DIGIT NINE">९<br>9=९</td>
+      </tr>
+      <tr>
+        <td>U+097x</td>
+        <td title="U+0970: DEVANAGARI ABBREVIATION SIGN">॰<br>ka^(o)=क॰</td>
+        <td title="U+0971: DEVANAGARI SIGN HIGH SPACING DOT">ॱ<br>ka^(.)=कॱ</td>
+        <td title="U+0972: DEVANAGARI LETTER CANDRA A">ॲ<br>(A)=ॲ</td>
+        <td title="U+0973: DEVANAGARI LETTER OE">ॳ<br>(oe)=ॳ</td>
+        <td title="U+0974: DEVANAGARI LETTER OOE">ॴ<br>(ooe)=ॴ</td>
+        <td title="U+0975: DEVANAGARI LETTER AW">ॵ<br>aw=ॵ</td>
+        <td title="U+0976: DEVANAGARI LETTER UE">ॶ<br>(ue)=ॶ</td>
+        <td title="U+0977: DEVANAGARI LETTER UUE">ॷ<br>(uue)=ॷ</td>
+        <td title="U+0978: DEVANAGARI LETTER MARWARI DDA">ॸ</td>
+        <td title="U+0979: DEVANAGARI LETTER ZHA">ॹ</td>
+        <td title="U+097A: DEVANAGARI LETTER HEAVY YA">ॺ<br>Y=ॺ्</td>
+        <td title="U+097B: DEVANAGARI LETTER GGA">ॻ</td>
+        <td title="U+097C: DEVANAGARI LETTER JJA">ॼ</td>
+        <td title="U+097D: DEVANAGARI LETTER GLOTTAL STOP">ॽ</td>
+        <td title="U+097E: DEVANAGARI LETTER DDDA">ॾ</td>
+        <td title="U+097F: DEVANAGARI LETTER BBA">ॿ</td>
+      </tr>
+      <tr>
+        <td>U+A8Ex</td>
+        <td title="U+A8E0: COMBINING DEVANAGARI DIGIT ZERO">꣠<br>ka^(0)=क꣠</td>
+        <td title="U+A8E1: COMBINING DEVANAGARI DIGIT ONE">꣡<br>ka^(1)=क꣡</td>
+        <td title="U+A8E2: COMBINING DEVANAGARI DIGIT TWO">꣢<br>ka^(2)=क꣢</td>
+        <td title="U+A8E3: COMBINING DEVANAGARI DIGIT THREE">꣣<br>ka^(3)=क꣣</td>
+        <td title="U+A8E4: COMBINING DEVANAGARI DIGIT FOUR">꣤<br>ka^(4)=क꣤</td>
+        <td title="U+A8E5: COMBINING DEVANAGARI DIGIT FIVE">꣥<br>ka^(5)=क꣥</td>
+        <td title="U+A8E6: COMBINING DEVANAGARI DIGIT SIX">꣦<br>ka^(6)=क꣦</td>
+        <td title="U+A8E7: COMBINING DEVANAGARI DIGIT SEVEN">꣧<br>ka^(7)=क꣧</td>
+        <td title="U+A8E8: COMBINING DEVANAGARI DIGIT EIGHT">꣨<br>ka^(8)=क꣨</td>
+        <td title="U+A8E9: COMBINING DEVANAGARI DIGIT NINE">꣩<br>ka^(9)=क꣩</td>
+        <td title="U+A8EA: COMBINING DEVANAGARI LETTER A">꣪<br>ka^(a)=क꣪</td>
+        <td title="U+A8EB: COMBINING DEVANAGARI LETTER U">꣫<br>ka^(U)=क꣫</td>
+        <td title="U+A8EC: COMBINING DEVANAGARI LETTER KA">꣬<br>ka^(ka)=क꣬</td>
+        <td title="U+A8ED: COMBINING DEVANAGARI LETTER NA">꣭<br>ka^(na)=क꣭</td>
+        <td title="U+A8EE: COMBINING DEVANAGARI LETTER PA">꣮<br>ka^(pa)=क꣮</td>
+        <td title="U+A8EF: COMBINING DEVANAGARI LETTER RA">꣯<br>ka^(ra)=क꣯</td>
+      </tr>
+      <tr>
+        <td>U+A8Fx</td>
+        <td title="U+A8F0: COMBINING DEVANAGARI LETTER VI">꣰<br>ka^(vi)=क꣰</td>
+        <td title="U+A8F1: COMBINING DEVANAGARI SIGN AVAGRAHA">꣱<br>ka^(')=क꣱</td>
+        <td title="U+A8F2: DEVANAGARI SIGN SPACING CANDRABINDU">ꣲ<br>ka*(u.)=कꣲ</td>
+        <td title="U+A8F3: DEVANAGARI SIGN CANDRABINDU VIRAMA">ꣳ<br>ka*(u.\)=कꣳ</td>
+        <td title="U+A8F4: DEVANAGARI SIGN DOUBLE CANDRABINDU VIRAMA">ꣴ<br>ka*(u.u.\)=कꣴ</td>
+        <td title="U+A8F5: DEVANAGARI SIGN CANDRABINDU TWO">ꣵ<br>ka*(u.2)=कꣵ</td>
+        <td title="U+A8F6: DEVANAGARI SIGN CANDRABINDU THREE">ꣶ<br>ka*(u.3)=कꣶ</td>
+        <td title="U+A8F7: DEVANAGARI SIGN CANDRABINDU AVAGRAHA">ꣷ<br>ka*(u.')=कꣷ</td>
+        <td title="U+A8F8: DEVANAGARI SIGN PUSHPIKA">꣸<br>ka*(ch)=क꣸</td>
+        <td title="U+A8F9: DEVANAGARI GAP FILLER">꣹<br>ka*(cq)=क꣹</td>
+        <td title="U+A8FA: DEVANAGARI CARET">꣺<br>ka^(v)=क꣺</td>
+        <td title="U+A8FB: DEVANAGARI HEADSTROKE">ꣻ<br>ka^(_)=कꣻ</td>
+        <td title="U+A8FC: DEVANAGARI SIGN SIDDHAM">꣼</td>
+        <td title="U+A8FD: DEVANAGARI JAIN OM">ꣽ</td>
+        <td title="U+A8FE: DEVANAGARI LETTER AY">ꣾ</td>
+        <td title="U+A8FF: DEVANAGARI VOWEL SIGN AY">ꣿ</td>
+      </tr>
+      <tr>
+        <td>U+1CDx</td>
+        <td title="U+1CD0: VEDIC TONE KARSHANA">᳐<br>ka^(^)=क᳐</td>
+        <td title="U+1CD1: VEDIC TONE SHARA">᳑<br>ka^(^`)=क᳑</td>
+        <td title="U+1CD2: VEDIC TONE PRENKHA">᳒<br>ka^(-)=क᳒</td>
+        <td title="U+1CD3: VEDIC SIGN NIHSHVASA">᳓<br>ka^(//)=क᳓</td>
+        <td title="U+1CD4: VEDIC SIGN YAJURVEDIC MIDLINE SVARITA">᳔<br>kaH*(-)=कः᳔</td>
+        <td title="U+1CD5: VEDIC TONE YAJURVEDIC AGGRAVATED INDEPENDENT SVARITA">᳕<br>ka_(w)=क᳕</td>
+        <td title="U+1CD6: VEDIC TONE YAJURVEDIC INDEPENDENT SVARITA">᳖<br>ka_(L)=क᳖</td>
+        <td title="U+1CD7: VEDIC TONE YAJURVEDIC KATHAKA INDEPENDENT SVARITA">᳗<br>ka_(c)=क᳗</td>
+        <td title="U+1CD8: VEDIC TONE CANDRA BELOW">᳘<br>ka_(u)=क᳘</td>
+        <td title="U+1CD9: VEDIC TONE YAJURVEDIC KATHAKA INDEPENDENT SVARITA SCHROEDER">᳙<br>ka_(^)=क᳙</td>
+        <td title="U+1CDA: VEDIC TONE DOUBLE SVARITA">᳚<br>ka^(``)=क᳚</td>
+        <td title="U+1CDB: VEDIC TONE TRIPLE SVARITA">᳛<br>ka^(```)=क᳛</td>
+        <td title="U+1CDC: VEDIC TONE KATHAKA ANUDATTA">᳜<br>ka_(`)=क᳜</td>
+        <td title="U+1CDD: VEDIC TONE DOT BELOW">᳝<br>ka_(.)=क᳝</td>
+        <td title="U+1CDE: VEDIC TONE TWO DOTS BELOW">᳞<br>ka_(..)=क᳞</td>
+        <td title="U+1CDF: VEDIC TONE THREE DOTS BELOW">᳟<br>ka_(...)=क᳟</td>
+      </tr>
+      <tr>
+        <td>U+1CEx</td>
+        <td title="U+1CE0: VEDIC TONE RIGVEDIC KASHMIRI INDEPENDENT SVARITA">᳠<br>ka^(c)=क᳠</td>
+        <td title="U+1CE1: VEDIC TONE ATHARVAVEDIC INDEPENDENT SVARITA">᳡<br>ka*(S)=क᳡</td>
+        <td title="U+1CE2: VEDIC SIGN VISARGA SVARITA">᳢<br>ka*(--)=क᳢</td>
+        <td title="U+1CE3: VEDIC SIGN VISARGA UDATTA">᳣<br>kaH*(^>)=कः᳣</td>
+        <td title="U+1CE4: VEDIC SIGN REVERSED VISARGA UDATTA">᳤<br>kaH*(^<)=कः᳤< /td>
+        <td title="U+1CE5: VEDIC SIGN VISARGA ANUDATTA">᳥<br>kaH*(_<)=कः᳥< /td>
+        <td title="U+1CE6: VEDIC SIGN REVERSED VISARGA ANUDATTA">᳦<br>kaH*(_>)=कः᳦</td>
+        <td title="U+1CE7: VEDIC SIGN VISARGA UDATTA WITH TAIL">᳧<br>ka*(^s)=क᳧</td>
+        <td title="U+1CE8: VEDIC SIGN VISARGA ANUDATTA WITH TAIL">᳨<br>ka*(_s)=क᳨</td>
+        <td title="U+1CE9: VEDIC SIGN ANUSVARA ANTARGOMUKHA">ᳩ<br>ka*(pq)=कᳩ</td>
+        <td title="U+1CEA: VEDIC SIGN ANUSVARA BAHIRGOMUKHA">ᳪ<br>ka*(qp)=कᳪ</td>
+        <td title="U+1CEB: VEDIC SIGN ANUSVARA VAMAGOMUKHA">ᳫ<br>ka*(qq)=कᳫ</td>
+        <td title="U+1CEC: VEDIC SIGN ANUSVARA VAMAGOMUKHA WITH TAIL">ᳬ<br>ka*(qq,)=कᳬ</td>
+        <td title="U+1CED: VEDIC SIGN TIRYAK">᳭<br>ka_(\)=क᳭</td>
+        <td title="U+1CEE: VEDIC SIGN HEXIFORM LONG ANUSVARA">ᳮ<br>ka*(E.)=कᳮ</td>
+        <td title="U+1CEF: VEDIC SIGN LONG ANUSVARA">ᳯ<br>ka*(c.6)=कᳯ</td>
+      </tr>
+      <tr>
+        <td>U+1CFx</td>
+        <td title="U+1CF0: VEDIC SIGN RTHANG LONG ANUSVARA">ᳰ<br>ka*(Th.)=कᳰ</td>
+        <td title="U+1CF1: VEDIC SIGN ANUSVARA UBHAYATO MUKHA">ᳱ<br>ka*(S:)=कᳱ</td>
+        <td title="U+1CF2: VEDIC SIGN ARDHAVISARGA">ᳲ<br>ka*(un)=कᳲ</td>
+        <td title="U+1CF3: VEDIC SIGN ROTATED ARDHAVISARGA">ᳳ<br>ka*(x)=कᳳ</td>
+        <td title="U+1CF4: VEDIC TONE CANDRA ABOVE">᳴<br>ka^(u)=क᳴</td>
+        <td title="U+1CF5: VEDIC SIGN JIHVAMULIYA">ᳵ<br>ka*(X)=कᳵ</td>
+        <td title="U+1CF6: VEDIC SIGN UPADHMANIYA">ᳶ<br>ka*(wm)=कᳶ</td>
+        <td title="U+1CF7: VEDIC SIGN ATIKRAMA">᳷<br>ka*(r)=क᳷</td>
+        <td title="U+1CF8: VEDIC TONE RING ABOVE">᳸<br>ka*(o)=क᳸</td>
+        <td title="U+1CF9: VEDIC TONE DOUBLE RING ABOVE">᳹<br>ka*(oo)=क᳹</td>
+        <td title="U+1CFA: VEDIC SIGN DOUBLE ANUSVARA ANTARGOMUKHA">ᳺ<br>ka*(pqpq)=कᳺ</td>
+      </tr>
+    </table>
+  </div>
 </body>
 </html>
