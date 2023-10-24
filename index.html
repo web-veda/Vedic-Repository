@@ -20,25 +20,35 @@
   </ul>
 
   <style>
-    .gray-a {
+    .gray-letter {
       color: red;
     }
   </style>
 
   <script>
-    // Get all the list items within the unordered list
-    const listItems = document.querySelectorAll('li');
+  // Function to replace all occurrences of "a" with gray "a"
+  function replaceLetterAWithGray() {
+    var elements = document.body.getElementsByTagName('*'); // Get all elements in the body
 
-    listItems.forEach((item) => {
-      // Get the text content of the list item
-      const text = item.textContent;
+    for (var i = 0; i < elements.length; i++) {
+      var element = elements[i];
 
-      // Replace every "a" with a gray-colored "a" using a regular expression
-      const modifiedText = text.replace(/।/g, '<span class="gray-a">।</span>');
+      if (element.nodeType === 3) {
+        // Text node
+        var text = element.textContent;
+        var grayText = text.replace(/।/g, '<span class="gray-letter">।</span>');
+        if (grayText !== text) {
+          var newNode = document.createElement('span');
+          newNode.innerHTML = grayText;
+          element.parentNode.replaceChild(newNode, element);
+        }
+      }
+    }
+  }
 
-      // Set the modified text back as the content of the list item
-      item.innerHTML = modifiedText;
-    });
-  </script>
+  // Call the function when the document is fully loaded
+  window.addEventListener('load', replaceLetterAWithGray);
+</script>
+
 </body>
 </html>
