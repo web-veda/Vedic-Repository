@@ -20,29 +20,13 @@
   </style>
 
   <script>
-  // Function to replace all occurrences of "a" with gray "a"
-  function replaceLetterAWithGray() {
-    var elements = document.body.getElementsByTagName('*'); // Get all elements in the body
-
-    for (var i = 0; i < elements.length; i++) {
-      var element = elements[i];
-
-      if (element.nodeType === 3) {
-        // Text node
-        var text = element.textContent;
-        var grayText = text.replace(/।/g, '<span class="gray-letter">।</span>');
-        if (grayText !== text) {
-          var newNode = document.createElement('span');
-          newNode.innerHTML = grayText;
-          element.parentNode.replaceChild(newNode, element);
-        }
-      }
-    }
-  }
-
-  // Call the function when the document is fully loaded
-  window.addEventListener('load', replaceLetterAWithGray);
-</script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elements = document.querySelectorAll('*');
+            elements.forEach(function(element) {
+                element.innerHTML = element.innerHTML.replace(/a/g, '<span class="gray-a">a</span>');
+            });
+        });
+    </script>
 
 </body>
 </html>
