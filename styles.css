@@ -9,56 +9,52 @@
   font-size: 16px;
 }
 
-.container {
-  display: flex;
-  justify-content: space-around;
-  padding: 14px;
-}
-body {
-  padding: 16px;
-}
-
-.table-container {
-  overflow: auto;
-  width: 100%;
+.tree,
+.tree ul {
+  margin:0 0 0 1em; /* indentation */
+  padding:0;
+  list-style:none;
+  color:#369;
+  position:relative;
 }
 
-/* Style for the table */
-table {
-  width: auto; /* Allow the table to be as wide as its content */
-  table-layout: fixed; /* Lock the table layout to avoid automatic column resizing */
-  /*     border-collapse: collapse; /* Collapse table borders */
-  border: 1px solid #000;
+.tree ul {margin-left:.5em} /* (indentation/2) */
+
+.tree:before,
+.tree ul:before {
+  content:"";
+  display:block;
+  width:0;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  border-left:1px solid;
 }
 
-/* Style for the table header */
-thead th {
-  background-color: #f0f0f0; /* Background color for header cells */
-  border: 1px solid #000;
+.tree li {
+  margin:0;
+  padding:0 1.5em; /* indentation + .5em */
+  line-height:2em; /* default list item's `line-height` */
+  font-weight:bold;
+  position:relative;
 }
 
-/* Style for the first column (make it sticky) */
-th:first-child,
-td:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 1; /* Ensure it appears above other cells when scrolling */
-  background-color: #fff; /* Optional: Add a white background to hide underlying cells */
-  border: 1px solid #000;
+.tree li:before {
+  content:"";
+  display:block;
+  width:10px; /* same with indentation */
+  height:0;
+  border-top:1px solid;
+  margin-top:-1px; /* border top width */
+  position:absolute;
+  top:1em; /* (line-height/2) */
+  left:0;
 }
 
-/* Style for other cells */
-th,
-td {
-  padding: 8px;
-  border: 1px solid #000; /* Optional: Add cell borders */
-
-  text-align: center;
-}
-#romin,
-#devout {
-  width: 97.75%;
-  padding: 10px;
-  font-size: 16px;
-  line-height: 24px;
+.tree li:last-child:before {
+  background:white; /* same with body background */
+  height:auto;
+  top:1em; /* (line-height/2) */
+  bottom:0;
 }
