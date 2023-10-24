@@ -18,5 +18,27 @@
       </ul>
     </li>
   </ul>
+
+  <style>
+    .gray-a {
+      color: gray;
+    }
+  </style>
+
+  <script>
+    // Get all the list items within the unordered list
+    const listItems = document.querySelectorAll('ul li');
+
+    listItems.forEach((item) => {
+      // Get the text content of the list item
+      const text = item.textContent;
+
+      // Replace every "a" with a gray-colored "a" using a regular expression
+      const modifiedText = text.replace(/।/g, '<span class="gray-a">।</span>');
+
+      // Set the modified text back as the content of the list item
+      item.innerHTML = modifiedText;
+    });
+  </script>
 </body>
 </html>
