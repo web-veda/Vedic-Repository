@@ -14,16 +14,18 @@
         <h5>सा व्वि᳘श्श्वायुः᳥᳘ सा व्वि᳘श्श्वक॑र्म्मा᳘ सा व्वि᳘श्श्वधा॑याः᳥ ॥ इन्द्र॑स्य त्त्वा भा᳘गᳮ सोमे᳘नात॑नच्च्मि᳘ व्विष्ण्णो॑ ह᳘व्व्यᳮ र॑क्ष ॥४॥</h5>
 
   <style>
-    .gray-a {
+    .red {
       color: red;
     }
   </style>
 
   <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var elements = document.querySelectorAll('h1 h2 h3 h4 h5 h6');
+            var elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
             elements.forEach(function(element) {
-                element.innerHTML = element.innerHTML.replace(/a/g, '<span class="gray-a">a</span>');
+                element.innerHTML = element.innerHTML
+                    .replace(/।/g, '<span class="red">।</span>')
+                    .replace(/᳥/g, '<span class="red">᳥</span>');
             });
         });
     </script>
