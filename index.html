@@ -328,5 +328,395 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
       </tr>
     </table>
   </div>
+
+  <script>
+    function toDevanagari() {
+  "use strict" /*Strict mode changes previously accepted "bad syntax" into real errors.*/;
+  /*jslint plusplus: true */
+
+  //get input
+  var inp = document.getElementById("romin").value;
+  /////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////    IAST   ///////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+  //convert to Unicode Hex
+  inp = "\\u0020" + toUni(inp); //add space
+
+  var rVow = [
+    "\\u0061", //a
+    "\\u0061\\u0061", //aa
+    "\\u0069", //i
+    "\\u0069\\u0069", //ii
+    "\\u0075", //u
+    "\\u0075\\u0075", //uu
+    "\\u002d\\u0072", //-r
+    "\\u002d\\u0072\\u0069", //-ri
+    "\\u0065", //e
+    "\\u0061\\u0069", //ai
+    "\\u006f", //o
+    "\\u0061\\u0075", //au
+    "\\u002d\\u006c", //-l
+    "\\u002d\\u006c\\u0069", //-li
+    "\\u004d", //M
+    "\\u004d\\u004d", //MM
+    "\\u0028\\u006e\\u004d\\u0029", //(nM)
+    "\\u0048", //H
+    "\\u0028\\u006f\\u0065\\u0029", //(oe)
+    "\\u0028\\u006f\\u006f\\u0065\\u0029", //(ooe)
+    "\\u0028\\u0045\\u0029", //(E)
+    "\\u0028\\u0065\\u0029", //(e)
+    "\\u0028\\u004f\\u0029", //(O)
+    "\\u0028\\u006f\\u0029", //(o)
+    "\\u0028\\u003c\\u0065\\u0029", //(<e)
+    "\\u0061\\u0077", //aw
+    "\\u0028\\u0075\\u002d\\u0029", //(u-)
+    "\\u0028\\u0075\\u0065\\u0029", //(ue)
+    "\\u0028\\u0075\\u0075\\u0065\\u0029", //(uue)
+    "\\u0028\\u0061\\u0029", //(a)
+    "\\u0028\\u0041\\u0029" //(A)
+  ];
+
+  //-------------- Start Conversion ---------------//
+
+  //Words starting with vowels
+  //dipthongs
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0065/g, "$1\\u090f"); //if 'e' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0065\\u0029/g, "$1\\u090e"); //if '(e)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0045\\u0029/g, "$1\\u090d"); //if '(E)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0061\\u0069/g, "$1\\u0910"); //if 'ai' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u006f/g, "$1\\u0913"); //if 'o' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u006f\\u0029/g, "$1\\u0912"); //if '(o)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u006f\\u0065\\u0029/g, "$1\\u0973"); //if '(oe)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u006f\\u006f\\u0065\\u0029/g, "$1\\u0974"); //if '(ooe)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u004f\\u0029/g, "$1\\u0911"); //if '(O)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0061\\u0075/g, "$1\\u0914"); //if 'au' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0061\\u0077/g, "$1\\u0975"); //if 'aw' preceeded by space
+
+  //Words starting with vowels
+  //Simple vowels
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0061/g, "$1\\u0905"); //if 'a' preceeded by space
+  inp = inp.replace(/\\u005e\\u0028\\u0061\\u0029/g, "\\ua8ea"); //^(a)
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0061\\u0029/g, "$1\\u0904"); //if '(a)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0041\\u0029/g, "$1\\u0972"); //if '(A)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0905\\u0061/g, "$1\\u0906"); //if 'aa' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0069/g, "$1\\u0907"); //if 'i' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0907\\u0069/g, "$1\\u0908"); //if 'ii' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0075/g, "$1\\u0909"); //if 'u' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0075\\u0065\\u0029/g, "$1\\u0976"); //if '(ue)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0028\\u0075\\u0075\\u0065\\u0029/g, "$1\\u0977"); //if '(uue)' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u0909\\u0075/g, "$1\\u090a"); //if 'uu' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u002d\\u0072/g, "$1\\u090b"); //if '-r' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u090b\\u0069/g, "$1\\u0960"); //if '-ri' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u002d\\u006c/g, "$1\\u090c"); //if '-l' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u090c\\u0069/g, "$1\\u0961"); //if '-li' preceeded by space
+  inp = inp.replace(/(\\u0020|\\u000a|\\u0027|\\u002d)\\u004f\\u004d/g, "$1\\u0950"); //if 'OM' preceeded by space
+
+  // function to replace symbol with replacement if following letter in class
+  function followed(param, symbol, replacement) {
+    var i;
+    for (i = 0; i < rVow.length; i++) {
+      param = param.split(symbol + rVow[i]).join(replacement + rVow[i]);
+    }
+    return param;
+  }
+
+  //Non-final consonants
+  //If subsequent letter in rVow then replace
+
+  inp = followed(inp, "\\u006b\\u0068", "\\u0916"); //kh
+  inp = followed(inp, "\\u006b", "\\u0915"); //k
+  inp = followed(inp, "\\u0067\\u0068", "\\u0918"); //gh
+  inp = followed(inp, "\\u0067", "\\u0917"); //g
+  inp = followed(inp, "\\u0047", "\\u0919"); //G
+  inp = followed(inp, "\\u0043\\u0068", "\\u091b"); //Ch
+  inp = followed(inp, "\\u0063\\u0068", "\\u091a"); //ch
+  inp = followed(inp, "\\u006a\\u0068", "\\u091d"); //jh
+  inp = followed(inp, "\\u006a", "\\u091c"); //j
+  inp = followed(inp, "\\u004a", "\\u091e"); //J
+  inp = followed(inp, "\\u0054\\u0068", "\\u0920"); //Th
+  inp = followed(inp, "\\u0054", "\\u091f"); //T
+  inp = followed(inp, "\\u0044\\u0068", "\\u0922"); //Dh
+  inp = followed(inp, "\\u0044", "\\u0921"); //D
+  inp = followed(inp, "\\u004e", "\\u0923"); //N
+  inp = followed(inp, "\\u0074\\u0068", "\\u0925"); //th
+  inp = followed(inp, "\\u0074", "\\u0924"); //t
+  inp = followed(inp, "\\u0064\\u0068", "\\u0927"); //dh
+  inp = followed(inp, "\\u0064", "\\u0926"); //d
+  inp = followed(inp, "\\u006e", "\\u0928"); //n
+  inp = followed(inp, "\\u0070\\u0068", "\\u092b"); //ph
+  inp = followed(inp, "\\u0070", "\\u092a"); //p
+  inp = followed(inp, "\\u0062\\u0068", "\\u092d"); //bh
+  inp = followed(inp, "\\u0062", "\\u092c"); //b
+  inp = followed(inp, "\\u006d", "\\u092e"); //m
+  inp = followed(inp, "\\u0079", "\\u092f"); //y
+  inp = followed(inp, "\\u0059", "\\u097a"); //Y
+  inp = followed(inp, "\\u0072", "\\u0930"); //r
+  inp = followed(inp, "\\u006c", "\\u0932"); //l
+  inp = followed(inp, "\\u004c", "\\u0933"); //L
+  inp = followed(inp, "\\u0076", "\\u0935"); //v
+  inp = followed(inp, "\\u0073\\u0068", "\\u0936"); //sh
+  inp = followed(inp, "\\u0053\\u0068", "\\u0937"); //Sh
+  inp = followed(inp, "\\u0073", "\\u0938"); //s
+  inp = followed(inp, "\\u0068", "\\u0939"); //h
+
+  //Medial Vowels
+
+  //dipthongs first
+  inp = inp.replace(/\\u0065/g, "\\u0947"); //e
+  inp = inp.replace(/\\u0061\\u0069/g, "\\u0948"); //ai
+  inp = inp.replace(/\\u006f/g, "\\u094b"); //o
+  inp = inp.replace(/\\u0061\\u0075/g, "\\u094c"); //au
+  inp = inp.replace(/\\u0061\\u0077/g, "\\u094f"); //aw
+  inp = inp.replace(/\\u0069/g, "\\u093f"); //i
+  inp = inp.replace(/\\u0061\\u0061/g, "\\u093e"); //aa
+  inp = inp.replace(/\\u093f\\u093f/g, "\\u0940"); //ii
+  inp = inp.replace(/\\u0075/g, "\\u0941"); //u
+  inp = inp.replace(/\\u0941\\u0941/g, "\\u0942"); //uu
+  inp = inp.replace(/\\u002d\\u0072/g, "\\u0943"); //-r
+  inp = inp.replace(/\\u002d\\u0930\\u093f/g, "\\u0944"); //-ri
+  inp = inp.replace(/\\u002d\\u006c/g, "\\u0962"); //-l
+  inp = inp.replace(/\\u002d\\u0932\\u093f/g, "\\u0963"); //-li
+  inp = inp.replace(/\\u004d/g, "\\u0902"); //M
+  inp = inp.replace(/\\u0902\\u0902/g, "\\u0901"); //MM
+  inp = inp.replace(/\\u0028\\u0928\\u0902\\u0029/g, "\\u0900"); //(nM)
+  inp = inp.replace(/\\u0048/g, "\\u0903"); //H
+  inp = inp.replace(/\\u0028\\u094b\\u0947\\u0029/g, "\\u093a"); //(oe)
+  inp = inp.replace(/\\u0028\\u094b\\u094b\\u0947\\u0029/g, "\\u093b"); //(ooe)
+  inp = inp.replace(/\\u002e/g, "\\u093c"); //nukta
+  inp = inp.replace(/\\u0028\\u0045\\u0029/g, "\\u0945"); //(E)
+  inp = inp.replace(/\\u0028\\u0947\\u0029/g, "\\u0946"); //(e)
+  inp = inp.replace(/\\u0028\\u003c\\u0947\\u0029/g, "\\u094e"); //(<e)
+  inp = inp.replace(/\\u0028\\u004f\\u0029/g, "\\u0949"); //(O)
+  inp = inp.replace(/\\u0028\\u094b\\u0029/g, "\\u094a"); //(o)
+  inp = inp.replace(/\\u0028\\u0941\\u002d\\u0029/g, "\\u0955"); //(u-)
+  inp = inp.replace(/\\u0028\\u0941\\u0947\\u0029/g, "\\u0956"); //(ue)
+  inp = inp.replace(/\\u0028\\u0942\\u0947\\u0029/g, "\\u0957"); //(uue)
+
+  //final consonants
+  inp = inp.replace(/\\u006b\\u0068/g, "\\u0916\\u094d"); //kh
+  inp = inp.replace(/\\u006b/g, "\\u0915\\u094d"); //k
+  inp = inp.replace(/\\u0067\\u0068/g, "\\u0918\\u094d"); //gh
+  inp = inp.replace(/\\u0067/g, "\\u0917\\u094d"); //g
+  inp = inp.replace(/\\u0047/g, "\\u0919\\u094d"); //G
+  inp = inp.replace(/\\u0043\\u0068/g, "\\u091b\\u094d"); //Ch
+  inp = inp.replace(/\\u0063\\u0068/g, "\\u091a\\u094d"); //ch
+  inp = inp.replace(/\\u006a\\u0068/g, "\\u091d\\u094d"); //jh
+  inp = inp.replace(/\\u006a/g, "\\u091c\\u094d"); //j
+  inp = inp.replace(/\\u004a/g, "\\u091e\\u094d"); //J
+  inp = inp.replace(/\\u0054\\u0068/g, "\\u0920\\u094d"); //Th
+  inp = inp.replace(/\\u0054/g, "\\u091f\\u094d"); //T
+  inp = inp.replace(/\\u0044\\u0068/g, "\\u0922\\u094d"); //Dh
+  inp = inp.replace(/\\u0044/g, "\\u0921\\u094d"); //D
+  inp = inp.replace(/\\u004e/g, "\\u0923\\u094d"); //N
+  inp = inp.replace(/\\u0074\\u0068/g, "\\u0925\\u094d"); //th
+  inp = inp.replace(/\\u0074/g, "\\u0924\\u094d"); //t
+  inp = inp.replace(/\\u0064\\u0068/g, "\\u0927\\u094d"); //dh
+  inp = inp.replace(/\\u0064/g, "\\u0926\\u094d"); //d
+  inp = inp.replace(/\\u006e/g, "\\u0928\\u094d"); //n
+  inp = inp.replace(/\\u0070\\u0068/g, "\\u092b\\u094d"); //ph
+  inp = inp.replace(/\\u0070/g, "\\u092a\\u094d"); //p
+  inp = inp.replace(/\\u0062\\u0068/g, "\\u092d\\u094d"); //bh
+  inp = inp.replace(/\\u0062/g, "\\u092c\\u094d"); //b
+  inp = inp.replace(/\\u006d/g, "\\u092e\\u094d"); //m
+  inp = inp.replace(/\\u0079/g, "\\u092f\\u094d"); //y
+  inp = inp.replace(/\\u0059/g, "\\u097a\\u094d"); //Y
+  inp = inp.replace(/\\u0072/g, "\\u0930\\u094d"); //r
+  inp = inp.replace(/\\u006c/g, "\\u0932\\u094d"); //l
+  inp = inp.replace(/\\u004c/g, "\\u0933\\u094d"); //L
+  inp = inp.replace(/\\u0076/g, "\\u0935\\u094d"); //v
+  inp = inp.replace(/\\u0073\\u0068/g, "\\u0936\\u094d"); //sh
+  inp = inp.replace(/\\u0053\\u0068/g, "\\u0937\\u094d"); //Sh
+  inp = inp.replace(/\\u0073/g, "\\u0938\\u094d"); //s
+  inp = inp.replace(/\\u0068/g, "\\u0939\\u094d"); //h
+
+  //Remove 'a'
+  inp = inp.replace(/\\u0061/g, ""); //
+
+  //avagraha
+  inp = inp.replace(/\\u0027/g, "\\u093d"); //'
+
+  //Dandas
+  inp = inp.replace(/\\u007c/g, "\u0964"); //|
+  inp = inp.replace(/\u0964\u0964/g, "\u0965"); //||
+
+  //Top accents
+  inp = inp.replace(/\\u005e\\u0028\\u0060\\u0029/g, "\\u0951"); //Udatta
+  inp = inp.replace(/\\u005e\\u0028\\u005c\\u0029/g, "\\u0953"); //Grave Accent
+  inp = inp.replace(/\\u005e\\u0028\\u002f\\u0029/g, "\\u0954"); //Acute Accent
+  inp = inp.replace(/\\u005e\\u0028\\u0030\\u0029/g, "\\ua8e0"); //0
+  inp = inp.replace(/\\u005e\\u0028\\u0031\\u0029/g, "\\ua8e1"); //1
+  inp = inp.replace(/\\u005e\\u0028\\u0032\\u0029/g, "\\ua8e2"); //2
+  inp = inp.replace(/\\u005e\\u0028\\u0033\\u0029/g, "\\ua8e3"); //3
+  inp = inp.replace(/\\u005e\\u0028\\u0034\\u0029/g, "\\ua8e4"); //4
+  inp = inp.replace(/\\u005e\\u0028\\u0035\\u0029/g, "\\ua8e5"); //5
+  inp = inp.replace(/\\u005e\\u0028\\u0036\\u0029/g, "\\ua8e6"); //6
+  inp = inp.replace(/\\u005e\\u0028\\u0037\\u0029/g, "\\ua8e7"); //7
+  inp = inp.replace(/\\u005e\\u0028\\u0038\\u0029/g, "\\ua8e8"); //8
+  inp = inp.replace(/\\u005e\\u0028\\u0039\\u0029/g, "\\ua8e9"); //9
+  inp = inp.replace(/\\u005e\\u0028\\u0055\\u0029/g, "\\ua8eb"); //u
+  inp = inp.replace(/\\u005e\\u0028\\u0915\\u0029/g, "\\ua8ec"); //ka
+  inp = inp.replace(/\\u005e\\u0028\\u0928\\u0029/g, "\\ua8ed"); //na
+  inp = inp.replace(/\\u005e\\u0028\\u092a\\u0029/g, "\\ua8ee"); //pa
+  inp = inp.replace(/\\u005e\\u0028\\u0930\\u0029/g, "\\ua8ef"); //ra
+  inp = inp.replace(/\\u005e\\u0028\\u0935\\u093f\\u0029/g, "\\ua8f0"); //vi
+  inp = inp.replace(/\\u005e\\u0028\\u093d\\u0029/g, "\\ua8f1"); //'
+  inp = inp.replace(/\\u005e\\u0028\\u0935\\u094d\\u0029/g, "\\ua8fa"); //^(v)
+  inp = inp.replace(/\\u005e\\u0028\\u005f\\u0029/g, "\\ua8fb"); //^(_)
+  inp = inp.replace(/\\u005e\\u0028\\u005e\\u0029/g, "\\u1cd0"); //^(^)
+  inp = inp.replace(/\\u005e\\u0028\\u005e\\u0060\\u0029/g, "\\u1cd1"); //^(^`)
+  inp = inp.replace(/\\u005e\\u0028\\u002d\\u0029/g, "\\u1cd2"); //^(-)
+  inp = inp.replace(/\\u005e\\u0028\\u002f\\u002f\\u0029/g, "\\u1cd3"); //^(//)
+  inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0029/g, "\\u1cda"); //^(``)
+  inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0060\\u0029/g, "\\u1cdb"); //^(```)
+  inp = inp.replace(/\\u005e\\u0028\\u0063\\u0029/g, "\\u1ce0"); //^(c)
+  inp = inp.replace(/\\u005e\\u0028\\u0941\\u0029/g, "\\u1cf4"); //^(u)
+  inp = inp.replace(/\\u005e\\u094a/g, "\\u1cf8"); //^(o)
+  inp = inp.replace(/\\u005e\\u0028\\u094b\\u094b\\u0029/g, "\\u1cf9"); //^(oo)
+
+  //Side accents
+  inp = inp.replace(/\\u002a\\u094a/g, "\\u0970"); //*(o)
+  inp = inp.replace(/\\u002a\\u0028\\u093c\\u0029/g, "\\u0971"); //*(.)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u0029/g, "\\ua8f2"); //*(u.)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u005c\\u0029/g, "\\ua8f3"); //*(u.\)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u0941\\u093c\\u005c\\u0029/g, "\\ua8f4"); //*(u.u.\)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u0032\\u0029/g, "\\ua8f5"); //*(u.2)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u0033\\u0029/g, "\\ua8f6"); //*(u.3)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u093c\\u093d\\u0029/g, "\\ua8f7"); //*(u.')
+  inp = inp.replace(/\\u002a\\u0028\\u091b\\u094d\\u0029/g, "\\ua8f8"); //*(Ch)
+  inp = inp.replace(/\\u002a\\u0028\\u0063\\u0071\\u0029/g, "\\ua8f9"); //*(cq)
+  inp = inp.replace(/\\u002a\\u0028\\u002d\\u0029/g, "\\u1cd4"); //*(-)
+  inp = inp.replace(/\\u002a\\u0028\\u0053\\u0029/g, "\\u1ce1"); //*(S)
+  inp = inp.replace(/\\u002a\\u0028\\u002d\\u002d\\u0029/g, "\\u1ce2"); //*(--)
+  inp = inp.replace(/\\u002a\\u0028\\u005e\\u003e\\u0029/g, "\\u1ce3"); //*(^>)
+  inp = inp.replace(/\\u002a\\u0028\\u005e\\u003c\\u0029/g, "\\u1ce4"); //*(^<)
+  inp = inp.replace(/\\u002a\\u0028\\u005f\\u003c\\u0029/g, "\\u1ce5"); //*(_>)
+  inp = inp.replace(/\\u002a\\u0028\\u005f\\u003e\\u0029/g, "\\u1ce6"); //*(_<)
+  inp = inp.replace(/\\u002a\\u0028\\u005e\\u0938\\u094d\\u0029/g, "\\u1ce7"); //*(^s)
+  inp = inp.replace(/\\u002a\\u0028\\u005f\\u0938\\u094d\\u0029/g, "\\u1ce8"); //*(_s)
+  inp = inp.replace(/\\u002a\\u0028\\u092a\\u094d\\u0071\\u0029/g, "\\u1ce9"); //*(pq)
+  inp = inp.replace(/\\u002a\\u0028\\u0071\\u092a\\u094d\\u0029/g, "\\u1cea"); //*(qp)
+  inp = inp.replace(/\\u002a\\u0028\\u0071\\u0071\\u0029/g, "\\u1ceb"); //*(qq)
+  inp = inp.replace(/\\u002a\\u0028\\u0071\\u0071\\u002c\\u0029/g, "\\u1cec"); //*(qq,)
+  inp = inp.replace(/\\u002a\\u0028\\u0045\\u093c\\u0029/g, "\\u1cee"); //*(E.)
+  inp = inp.replace(/\\u002a\\u0028\\u0063\\u093c\\u0036\\u0029/g, "\\u1cef"); //*(c.6)
+  inp = inp.replace(/\\u002a\\u0028\\u0920\\u094d\\u093c\\u0029/g, "\\u1cf0"); //*(Th.)
+  inp = inp.replace(/\\u002a\\u0028\\u0053\\u003a\\u0029/g, "\\u1cf1"); //*(S:)
+  inp = inp.replace(/\\u002a\\u0028\\u0941\\u0928\\u094d\\u0029/g, "\\u1cf2"); //*(un)
+  inp = inp.replace(/\\u002a\\u0028\\u0078\\u0029/g, "\\u1cf3"); //*(x)
+  inp = inp.replace(/\\u002a\\u0028\\u0058\\u0029/g, "\\u1cf4"); //*(X)
+  inp = inp.replace(/\\u002a\\u0028\\u0077\\u092e\\u094d\\u0029/g, "\\u1cf6"); //*(wm)
+  inp = inp.replace(/\\u002a\\u0028\\u0930\\u094d\\u0029/g, "\\u1cf7"); //*(r)
+  inp = inp.replace(/\\u002a\\u0028\\u092a\\u094d\\u0071\\u092a\\u094d\\u0071\\u0029/g, "\\u1cfa"); //*(pq)
+
+  //Bottom accents
+  inp = inp.replace(/\\u005f\\u0028\\u002d\\u0029/g, "\\u0952"); //_(-)
+  inp = inp.replace(/\\u005f\\u0028\\u0077\\u0029/g, "\\u1cd5"); //_(w)
+  inp = inp.replace(/\\u005f\\u0028\\u0933\\u094d\\u0029/g, "\\u1cd6"); //_(L)
+  inp = inp.replace(/\\u005f\\u0028\\u0063\\u0029/g, "\\u1cd7"); //_(c)
+  inp = inp.replace(/\\u005f\\u0028\\u0941\\u0029/g, "\\u1cd8"); //_(u)
+  inp = inp.replace(/\\u005f\\u0028\\u005e\\u0029/g, "\\u1cd9"); //_(^)
+  inp = inp.replace(/\\u005f\\u0028\\u0060\\u0029/g, "\\u1cdc"); //_(`)
+  inp = inp.replace(/\\u005f\\u0028\\u093c\\u0029/g, "\\u1cdd"); //_(.)
+  inp = inp.replace(/\\u005f\\u0028\\u093c\\u093c\\u0029/g, "\\u1cde"); //_(..)
+  inp = inp.replace(/\\u005f\\u0028\\u093c\\u093c\\u093c\\u0029/g, "\\u1cdf"); //_(...)
+  inp = inp.replace(/\\u005f\\u0028\\u005c\\u0029/g, "\\u1ced"); //_(\)
+
+  //Numerals
+  inp = inp.replace(/\\u0030/g, "\\u0966");
+  inp = inp.replace(/\\u0031/g, "\\u0967");
+  inp = inp.replace(/\\u0032/g, "\\u0968");
+  inp = inp.replace(/\\u0033/g, "\\u0969");
+  inp = inp.replace(/\\u0034/g, "\\u096a");
+  inp = inp.replace(/\\u0035/g, "\\u096b");
+  inp = inp.replace(/\\u0036/g, "\\u096c");
+  inp = inp.replace(/\\u0037/g, "\\u096d");
+  inp = inp.replace(/\\u0038/g, "\\u096e");
+  inp = inp.replace(/\\u0039/g, "\\u096f");
+
+  //print output
+  document.getElementById("devout").innerHTML = fromUni(inp);
+}
+
+function toDevanagariUpdate() {
+  "use strict";
+  /*jslint plusplus: true */
+
+  //get input
+  var inp = document.getElementById("romin").value;
+
+  //inp = inp + " ";
+  //output
+  document.getElementById("devout").innerHTML = fromUni(inp);
+}
+
+function toUni(input) {
+  "use strict";
+  var i, l;
+
+  function pad_four(input) {
+    var l = input.length;
+    if (l === 0) {
+      return "0000";
+    }
+    if (l === 1) {
+      return "000" + input;
+    }
+    if (l === 2) {
+      return "00" + input;
+    }
+    if (l === 3) {
+      return "0" + input;
+    }
+    return input;
+  }
+  var output = "";
+  for (i = 0, l = input.length; i < l; i++) {
+    output += "\\u" + pad_four(input.charCodeAt(i).toString(16));
+  }
+  return output;
+}
+
+function fromUni(text) {
+  "use strict";
+
+  return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
+    return String.fromCharCode(parseInt(match.replace(/\\u/g, ""), 16));
+  });
+}
+
+
+
+const toggleButton = document.getElementById('toggleButton');
+        const myTable = document.getElementById('characterTable');
+
+        toggleButton.addEventListener('click', () => {
+            if (myTable.style.display === 'none' || myTable.style.display === '') {
+                myTable.style.display = 'table';
+            } else {
+                myTable.style.display = 'none';
+            }
+        }); 
+
+// // JavaScript to make the first column sticky
+// const tableContainer = document.querySelector('.table-container');
+// const table = tableContainer.querySelector('table');
+
+// // Add an event listener to the table container for horizontal scrolling
+// tableContainer.addEventListener('scroll', function () {
+//     const scrollLeft = tableContainer.scrollLeft;
+//     const ths = table.querySelectorAll('th:first-child');
+//     const tds = table.querySelectorAll('td:first-child');
+
+//     // Apply a translation to the first column cells to keep them sticky
+//     ths.forEach(th => {
+//         th.style.transform = `translateX(${scrollLeft}px)`;
+//     });
+
+//     tds.forEach(td => {
+//         td.style.transform = `translateX(${scrollLeft}px)`;
+//     });
+// });
+  </script>
 </body>
 </html>
