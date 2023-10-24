@@ -2,12 +2,13 @@
 @font-face {
     font-family: 'Siddhanta';
     src: url('siddhanta.ttf') format('truetype');
-    text-align: justify;
+    
 }
 
 * {
   font-family: 'Siddhanta';
   font-size: 16px;
+  text-align: justify;
 }
 
 .tree,
