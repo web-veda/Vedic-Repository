@@ -33,6 +33,6 @@ h5 {
     font-size: 17px;
 }
 
-h6 {
+h6, div, span {
     font-size: 12px;
 }
