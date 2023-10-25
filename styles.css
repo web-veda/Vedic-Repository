@@ -7,6 +7,7 @@
 * {
   font-family: 'Siddhanta';
   text-align: justify;
+    font-size: 12px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -31,8 +32,4 @@ h4 {
 
 h5 {
     font-size: 17px;
-}
-
-h6, div, span {
-    font-size: 12px;
 }
