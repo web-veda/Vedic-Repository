@@ -38,6 +38,7 @@ h6 {
     font-size: 1rem;
 }
 
-span {
+div, span {
     font-size: 1rem;
+    font-weight: bold;
 }
