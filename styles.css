@@ -1,11 +1,11 @@
 /* noto-serif-devanagari-regular - devanagari_latin_latin-ext */
 @font-face {
     font-family: 'Siddhanta';
-    src: url('siddhanta.ttf') format('truetype');
+    src: url('vedakshar.otf') format('truetype');
 }
 
 * {
-    font-family: 'Siddhanta';
+    font-family: 'Vedakshar';
     text-align: justify;
     font-size: 12px;
 }
