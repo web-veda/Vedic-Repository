@@ -351,13 +351,14 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
 <script>
   function toDevanagari() {"use strict"
 
-  //get input
-  var inp = document.getElementById("romin").value;
-
-  //convert to Unicode Hex
-  inp = toUni(inp); //add space
+  //get input and convert to hex
+  var inp = toUni(document.getElementById("romin").value);
   
   // VOWELS
+  inp = inp.replace(/\\u0028\\u004f\\u004d\\u0029/g, "\\u0950"); // OM
+  inp = inp.replace(/\\u0028\\u0041\\u0029/g, "\\u0972"); // candra a
+  inp = inp.replace(/\\u0028\\u0061\\u0029/g, "\\u0904"); // short a
+  inp = inp.replace(/\\u0028\\u0061\\u0077\\u0029/g, "\\u0975"); // aw
   inp = inp.replace(/\\u0061\\u0075/g, "\\u0914"); // au
   inp = inp.replace(/\\u0061\\u0069/g, "\\u0910"); // ai
   inp = inp.replace(/\\u0061\\u0061/g, "\\u0906"); // aa
@@ -366,9 +367,17 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u002d\\u006c\\u0069/g, "\\u0961") // -li
   inp = inp.replace(/\\u0069\\u0069/g, "\\u0908") // ii
   inp = inp.replace(/\\u0069/g, "\\u0907") // i
+  inp = inp.replace(/\\u0028\\u0075\\u0075\\u0065\\u0029/g, "\\u0977") // uue
+  inp = inp.replace(/\\u0028\\u0075\\u0065\\u0029/g, "\\u0976") // ue
   inp = inp.replace(/\\u0075\\u0075/g, "\\u090a") // uu
   inp = inp.replace(/\\u0075/g, "\\u0909") // u
+  inp = inp.replace(/\\u0028\\u006f\\u006f\\u0065\\u0029/g, "\\u0974") // ooe
+  inp = inp.replace(/\\u0028\\u006f\\u0065\\u0029/g, "\\u0973") // oe
+  inp = inp.replace(/\\u0028\\u0045\\u0029/g, "\\u090d") // candra e
+  inp = inp.replace(/\\u0028\\u0065\\u0029/g, "\\u090e") // short e
   inp = inp.replace(/\\u0065/g, "\\u090f") // e
+  inp = inp.replace(/\\u0028\\u004f\\u0029/g, "\\u0911") // candra o
+  inp = inp.replace(/\\u0028\\u006f\\u0029/g, "\\u0912") // short o
   inp = inp.replace(/\\u006f/g, "\\u0913") // o
   inp = inp.replace(/\\u002d\\u0072/g, "\\u090b") // -r
   inp = inp.replace(/\\u002d\\u006c/g, "\\u090c") // -l
@@ -412,6 +421,7 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   
   // REPLACE HALANT WITH VOWEL MARK
   inp = inp.replace(/\\u094d\\u0905/g, "") //a
+  inp = inp.replace(/\\u094d\\u0975/g, "\\u094f") // aw
   inp = inp.replace(/\\u094d\\u0914/g, "\\u094c") // au
   inp = inp.replace(/\\u094d\\u0910/g, "\\u0948") // ai
   inp = inp.replace(/\\u094d\\u0906/g, "\\u093e") // aa
@@ -419,10 +429,18 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u094d\\u0961/g, "\\u0963") // -li
   inp = inp.replace(/\\u094d\\u0908/g, "\\u0940") // ii
   inp = inp.replace(/\\u094d\\u0907/g, "\\u093f") // i
+  inp = inp.replace(/\\u094d\\u0977/g, "\\u0957") // uue
+  inp = inp.replace(/\\u094d\\u0976/g, "\\u0956") // ue
   inp = inp.replace(/\\u094d\\u090a/g, "\\u0942") // uu
   inp = inp.replace(/\\u094d\\u0909/g, "\\u0941") // u
+  inp = inp.replace(/\\u094d\\u090d/g, "\\u0945") // candra e
+  inp = inp.replace(/\\u094d\\u090e/g, "\\u0946") // short e  
   inp = inp.replace(/\\u094d\\u090f/g, "\\u0947") // e
+  inp = inp.replace(/\\u094d\\u0911/g, "\\u0949") // candra o
+  inp = inp.replace(/\\u094d\\u0912/g, "\\u094a") // short o
   inp = inp.replace(/\\u094d\\u0913/g, "\\u094b") // o
+  inp = inp.replace(/\\u094d\\u0974/g, "\\u093b") // ooe
+  inp = inp.replace(/\\u094d\\u0973/g, "\\u093a") // oe
   inp = inp.replace(/\\u094d\\u090b/g, "\\u0943") // -r
   inp = inp.replace(/\\u094d\\u090c/g, "\\u0962") // -l
   inp = inp.replace(/\\u004d\\u004d/g, "\\u0901") // chandrabindu
@@ -463,10 +481,8 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u005e\\u0028\\u005e\\u0060\\u0029/g, "\\u1cd1"); //^(^`)
   inp = inp.replace(/\\u005e\\u0028\\u002d\\u0029/g, "\\u1cd2"); //^(-)
   inp = inp.replace(/\\u005e\\u0028\\u002f\\u002f\\u0029/g, "\\u1cd3"); //^(//)
-  inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0029/g, "\\u1cda"); //^(``)
-  inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0060\\u0029/g, "\\u1cdb"); //^(```)
   inp = inp.replace(/\\u005e\\u0028\\u0063\\u0029/g, "\\u1ce0"); //^(c)
-  inp = inp.replace(/\\u005e\\u0028\\u0055\\u0029/g, "\\u1cf4"); //^(u)
+  inp = inp.replace(/\\u005e\\u0028\\u0055\\u0029/g, "\\u1cf4"); //^(U)
   inp = inp.replace(/\\u005e\\u0028\\u0913\\u0029/g, "\\u1cf8"); //^(o)
   inp = inp.replace(/\\u005e\\u0028\\u0913\\u0913\\u0029/g, "\\u1cf9"); //^(oo)  
 
@@ -498,7 +514,7 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u002a\\u0028\\u0063\\u002e\\u0036\\u0029/g, "\\u1cef"); //*(c.6)
   inp = inp.replace(/\\u002a\\u0028\\u0920\\u094d\\u002e\\u0029/g, "\\u1cf0"); //*(Th.)
   inp = inp.replace(/\\u002a\\u0028\\u0053\\u003a\\u0029/g, "\\u1cf1"); //*(S:)
-  inp = inp.replace(/\\u002a\\u0028\\u0941\\u0928\\u094d\\u0029/g, "\\u1cf2"); //*(un)
+  inp = inp.replace(/\\u002a\\u0028\\u0909\\u0928\\u094d\\u0029/g, "\\u1cf2"); //*(un)
   inp = inp.replace(/\\u002a\\u0028\\u0078\\u0029/g, "\\u1cf3"); //*(x)
   inp = inp.replace(/\\u002a\\u0028\\u0058\\u0029/g, "\\u1cf5"); //*(X)
   inp = inp.replace(/\\u002a\\u0028\\u0077\\u092e\\u094d\\u0029/g, "\\u1cf6"); //*(wm)
