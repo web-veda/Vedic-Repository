@@ -484,10 +484,12 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u005e\\u0028\\u0063\\u0029/g, "\\u1ce0"); //^(c)
   inp = inp.replace(/\\u005e\\u0028\\u0055\\u0029/g, "\\u1cf4"); //^(U)
   inp = inp.replace(/\\u005e\\u0028\\u0913\\u0029/g, "\\u1cf8"); //^(o)
-  inp = inp.replace(/\\u005e\\u0028\\u0913\\u0913\\u0029/g, "\\u1cf9"); //^(oo)  
+  inp = inp.replace(/\\u005e\\u0028\\u0913\\u0913\\u0029/g, "\\u1cf9"); //^(oo)
+  inp = inp.replace(/\\u005e\\u0028\\u005c\\u0029/g, "\\u0953"); //^(\)
+  inp = inp.replace(/\\u005e\\u0028\\u002f\\u0029/g, "\\u0954"); //^(\)
 
   // SIDE ACCENTS
-  inp = inp.replace(/\\u002a\\u0028\\u0913\\u0029/g, "\\u0970"); //*(o)
+  inp = inp.replace(/\\u002a\\u0912/g, "\\u0970"); //*(o)
   inp = inp.replace(/\\u002a\\u093c/g, "\\u0971"); //*(.)
   inp = inp.replace(/\\u002a\\u0028\\u0901\\u0029/g, "\\ua8f2"); //*(MM)
   inp = inp.replace(/\\u002a\\u0028\\u0902\\u005c\\u0029/g, "\\ua8f3"); //*(M\)
