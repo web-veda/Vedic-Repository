@@ -467,7 +467,7 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u005e\\u0028\\u0037\\u0029/g, "\\ua8e7") // ^(7)
   inp = inp.replace(/\\u005e\\u0028\\u0038\\u0029/g, "\\ua8e8") // ^(8)
   inp = inp.replace(/\\u005e\\u0028\\u0039\\u0029/g, "\\ua8e9") // ^(9)
-  inp = inp.replace(/\\u005e\\u0028\\u0905\\u0029/g, "\\ua8ea") // ^(a)
+  inp = inp.replace(/\\u005e\\u0904/g, "\\ua8ea") // ^(a)
   inp = inp.replace(/\\u005e\\u0028\\u0909\\u0029/g, "\\ua8eb") // ^(u)
   inp = inp.replace(/\\u005e\\u0028\\u0915\\u0029/g, "\\ua8ec") // ^(ka)
   inp = inp.replace(/\\u005e\\u0028\\u0928\\u0029/g, "\\ua8ed") // ^(na)
@@ -483,10 +483,10 @@ e.g. अक्षरं अहं पुरुषोत्तम दासोऽ
   inp = inp.replace(/\\u005e\\u0028\\u002f\\u002f\\u0029/g, "\\u1cd3"); //^(//)
   inp = inp.replace(/\\u005e\\u0028\\u0063\\u0029/g, "\\u1ce0"); //^(c)
   inp = inp.replace(/\\u005e\\u0028\\u0055\\u0029/g, "\\u1cf4"); //^(U)
-  inp = inp.replace(/\\u005e\\u0028\\u0913\\u0029/g, "\\u1cf8"); //^(o)
+  inp = inp.replace(/\\u005e\\u0912/g, "\\u1cf8"); //^(o)
   inp = inp.replace(/\\u005e\\u0028\\u0913\\u0913\\u0029/g, "\\u1cf9"); //^(oo)
   inp = inp.replace(/\\u005e\\u0028\\u005c\\u0029/g, "\\u0953"); //^(\)
-  inp = inp.replace(/\\u005e\\u0028\\u002f\\u0029/g, "\\u0954"); //^(\)
+  inp = inp.replace(/\\u005e\\u0028\\u002f\\u0029/g, "\\u0954"); //^(/)
 
   // SIDE ACCENTS
   inp = inp.replace(/\\u002a\\u0912/g, "\\u0970"); //*(o)
