@@ -660,11 +660,11 @@ function toIASTtext() {"use strict"
   inp = inp.replace(/\\u094d\\u0973/g, "\\u093a") // oe
   inp = inp.replace(/\\u094d\\u090b/g, "\\u0943") // -r
   inp = inp.replace(/\\u094d\\u090c/g, "\\u0962") // -l
-  inp = inp.replace(/\\u004d\\u004d/g, "\\u0901") // chandrabindu
-  inp = inp.replace(/\\u004d/g, "\\u0902") // anusvara
-  inp = inp.replace(/\\u0048/g, "\\u0903") // visarga
+  inp = inp.replace(/\\u004d\\u004d/g, "˜") // chandrabindu
+  inp = inp.replace(/\\u004d/g, "ṁ") // anusvara
+  inp = inp.replace(/\\u0048/g, "ḥ") // visarga
   inp = inp.replace(/\\u0028\\u002e\\u0029/g, "\\u093c") // nukta
-  inp = inp.replace(/\\u0027/g, "\\u093d"); // avagraha
+  inp = inp.replace(/\\u0027/g, "\\u0027"); // avagraha
 
   // DANDAS
   inp = inp.replace(/\\u007c/g, "\u0964"); //|
