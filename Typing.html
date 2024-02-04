@@ -755,16 +755,16 @@ function toIASTtext() {"use strict"
   inp = inp.replace(/\\u005f\\u0028\\u005c\\u0029/g, "\\u1ced"); //_(\)
 
   // NUMERALS
-  inp = inp.replace(/\\u0030/g, "\\u0966"); // 0
-  inp = inp.replace(/\\u0031/g, "\\u0967"); // 1
-  inp = inp.replace(/\\u0032/g, "\\u0968"); // 2
-  inp = inp.replace(/\\u0033/g, "\\u0969"); // 3
-  inp = inp.replace(/\\u0034/g, "\\u096a"); // 4
-  inp = inp.replace(/\\u0035/g, "\\u096b"); // 5
-  inp = inp.replace(/\\u0036/g, "\\u096c"); // 6
-  inp = inp.replace(/\\u0037/g, "\\u096d"); // 7
-  inp = inp.replace(/\\u0038/g, "\\u096e"); // 8
-  inp = inp.replace(/\\u0039/g, "\\u096f"); // 9
+  inp = inp.replace(/\\u0030/g, "0"); // 0
+  inp = inp.replace(/\\u0031/g, "1"); // 1
+  inp = inp.replace(/\\u0032/g, "2"); // 2
+  inp = inp.replace(/\\u0033/g, "3"); // 3
+  inp = inp.replace(/\\u0034/g, "4"); // 4
+  inp = inp.replace(/\\u0035/g, "5"); // 5
+  inp = inp.replace(/\\u0036/g, "6"); // 6
+  inp = inp.replace(/\\u0037/g, "7"); // 7
+  inp = inp.replace(/\\u0038/g, "8"); // 8
+  inp = inp.replace(/\\u0039/g, "9"); // 9
 
   //print output
   document.getElementById("IAST").innerHTML = fromIAST(inp);
