@@ -65,21 +65,12 @@
       width: 100%;
     }
 
-    #romin {
+    #romin,#devout,#IAST,#Gujarati,#Telugu {
       width: 100%;
       padding: 10px;
       font-size: 12px;
       text-align: justify;
-    }
-
-    #devout,
-    #IAST,
-    #Gujarati,
-    #Telugu {
-      width: 100%;
-      padding: 10px;
-      font-size: 12px;
-      text-align: justify;
+      height: 100%/3;
     }
   </style>
 </head>
@@ -87,12 +78,12 @@
 <body>
   <div id="container">
     <div class="BOX">
-      <textarea id="romin" rows="5" placeholder="Type here" oninput="toDevanagari(); toIASTtext(); toGujarati(); toTelu()" spellcheck="false"></textarea>
+      <textarea id="romin" placeholder="Type here" oninput="toDevanagari(); toIASTtext(); toGujarati(); toTelu()" spellcheck="false"></textarea>
       <div class="grid-container">
-        <textarea id="devout" rows="5" placeholder="Devanagari" readonly></textarea>
-        <textarea id="IAST" rows="5" placeholder="IAST" readonly></textarea>
-        <textarea id="Gujarati" rows="5" placeholder="Gujarati" readonly></textarea>
-        <textarea id="Telugu" rows="5" placeholder="Telugu" readonly></textarea>
+        <textarea id="devout" placeholder="Devanagari" readonly></textarea>
+        <textarea id="IAST" placeholder="IAST" readonly></textarea>
+        <textarea id="Gujarati" placeholder="Gujarati" readonly></textarea>
+        <textarea id="Telugu" placeholder="Telugu" readonly></textarea>
       </div>
     </div>
   </div>
