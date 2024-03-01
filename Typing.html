@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link rel="stylesheet" type="text/css" href="siddhanta.ttf">
+<!--   <link rel="stylesheet" type="text/css" href="siddhanta.ttf"> -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari&display=swap" />
@@ -22,7 +22,7 @@
       width: 100%;
     }
 
-    #romin,#devout,#IAST,#Gujarati,#Telugu {
+    #romin,#devout,#IAST,#Gujarati,#Telugu,#Brahmi {
       width: 100%;
       padding: 10px;
       font-size: 12px;
@@ -1103,7 +1103,7 @@
     inp = inp.replace(/\\u0038/g, "𑁮"); // 8
     inp = inp.replace(/\\u0039/g, "𑁯"); // 9
     //print output
-    document.getElementById("IAST").innerHTML = fromUni(inp);
+    document.getElementById("Brahmi").innerHTML = fromUni(inp);
   }
 
   function toUni(input) {
