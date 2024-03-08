@@ -154,6 +154,7 @@
     inp = inp.replace(/\\u094d\\u0973/g, "\\u093a") // oe
     inp = inp.replace(/\\u094d\\u090b/g, "\\u0943") // -r
     inp = inp.replace(/\\u094d\\u090c/g, "\\u0962") // -l
+    inp = inp.replace(/\\u004d\\u004d\\u004d/g, "\\u0902") // Gujarati nasalized vowel
     inp = inp.replace(/\\u004d\\u004d/g, "\\u0901") // chandrabindu
     inp = inp.replace(/\\u004d/g, "\\u0902") // anusvara
     inp = inp.replace(/\\u0048/g, "\\u0903") // visarga
@@ -364,7 +365,8 @@
     inp = inp.replace(/\\u094d\\u0973/g, "\\u093a") // oe
     inp = inp.replace(/\\u094d\\u090b/g, "\\u0943") // -r
     inp = inp.replace(/\\u094d\\u090c/g, "\\u0962") // -l
-    inp = inp.replace(/\\u004d\\u004d/g, "˜") // chandrabindu
+    inp = inp.replace(/\\u004d\\u004d\\u004d/g, "\\u0303") // Gujarati nasalized vowel
+    inp = inp.replace(/\\u004d\\u004d/g, "\\u0310") // chandrabindu
     inp = inp.replace(/\\u004d/g, "ṁ") // anusvara
     inp = inp.replace(/\\u0048/g, "ḥ") // visarga
     inp = inp.replace(/\\u0028\\u002e\\u0029/g, "\\u093c") // nukta
@@ -574,6 +576,7 @@
     //inp = inp.replace(/\\u0acd\\u0973/g, "\\u093a") // oe
     inp = inp.replace(/\\u0acd\\u0a8b/g, "\\u0ac3") // -r
     inp = inp.replace(/\\u0acd\\u0a8c/g, "\\u0ae2") // -l
+    inp = inp.replace(/\\u004d\\u004d\\u004d/g, "\\u0a82") // gujarati nazalised vowel
     inp = inp.replace(/\\u004d\\u004d/g, "\\u0a81") // chandrabindu
     inp = inp.replace(/\\u004d/g, "\\u0a82") // anusvara
     inp = inp.replace(/\\u0048/g, "\\u0a83") // visarga
@@ -784,6 +787,7 @@
     inp = inp.replace(/\\u0c4d\\u0973/g, "\\u093a") // oe
     inp = inp.replace(/\\u0c4d\\u0c0b/g, "\\u0c43") // -r
     inp = inp.replace(/\\u0c4d\\u0c0c/g, "\\u0c62") // -l
+    inp = inp.replace(/\\u004d\\u004d\\u004d/g, "\\u0c02") // gujarati nazalised vowel
     inp = inp.replace(/\\u004d\\u004d/g, "\\u0c01") // chandrabindu
     inp = inp.replace(/\\u004d/g, "\\u0c02") // anusvara
     inp = inp.replace(/\\u0048/g, "\\u0c03") // visarga
@@ -1003,6 +1007,7 @@
     // inp = inp.replace(/𑁆\\u0973/g, "\\u093a") // oe
     inp = inp.replace(/𑁆𑀋/g, "𑀾") // -r
     inp = inp.replace(/𑁆𑀍/g, "𑁀") // -l
+    inp = inp.replace(/\\u004d\\u004d\\u004d/g, "𑀁") // Gujarati nazalised vowel
     inp = inp.replace(/\\u004d\\u004d/g, "𑀀") // chandrabindu
     inp = inp.replace(/\\u004d/g, "𑀁") // anusvara
     inp = inp.replace(/\\u0048/g, "𑀂") // visarga
