@@ -330,7 +330,9 @@
     inp = inp.replace(/\\u0023\\u006f/g, "O") // o
     inp = inp.replace(/\\u006f/g, "o") // o
     inp = inp.replace(/\\u0023\\u002d\\u0072/g, "Ṛ") // -r
+    inp = inp.replace(/\\u002d\\u0072/g, "ṛ") // -r
     inp = inp.replace(/\\u0023\\u002d\\u006c/g, "Ḷ") // -l
+    inp = inp.replace(/\\u002d\\u006c/g, "ḷ") // -l
     // CONSONANT WITH HALANT/VIRAMA
     inp = inp.replace(/\\u0023\\u006b\\u0068/g, "Kh") // kh
     inp = inp.replace(/\\u006b\\u0068/g, "kh") // kh
