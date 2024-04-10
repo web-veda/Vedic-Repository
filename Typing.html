@@ -16,8 +16,8 @@
     }
 
     @font-face {
-    font-family: 'Vedakshar';
-    src: url('vedakshar.otf') format('opentype');
+    font-family: 'Siddhanta';
+    src: url('siddhanta1.ttf') format('truetype');
     /* Add more src lines for different formats if needed */
 }
 
@@ -31,19 +31,19 @@
     #romin,#devout,#IAST,#Gujarati,#Telugu,#Brahmi {
       width: 100%;
       padding: 10px;
-      font-size: 12px;
-      text-align: justify;
+      text-align: left;
       height: 33.33vh;
       }
     #Gujarati {
       font-family: 'Noto Sans Gujarati', sans-serif;
+      font-size: 12px;
       }
     #Telugu {
       font-family: 'Noto Sans Telugu', sans-serif;
       }
     #devout {
-      font-family: 'Vedakshar', sans-serif;
-      font-size: 18px;
+      font-family: 'Siddhanta', sans-serif;
+      font-size: 12px;
       }
     #Brahmi {
       font-family: 'Noto Sans Brahmi', sans-serif;
@@ -261,6 +261,10 @@
     inp = inp.replace(/\\u0037/g, "\\u096d"); // 7
     inp = inp.replace(/\\u0038/g, "\\u096e"); // 8
     inp = inp.replace(/\\u0039/g, "\\u096f"); // 9
+	
+	//asterisk handling
+	inp = inp.replace(/\\u0023/g, "");
+	
     //print output
     document.getElementById("devout").innerHTML = fromUni(inp);
   }
@@ -435,8 +439,8 @@
     inp = inp.replace(/\\u0028\\u002e\\u0029/g, "\\u093c") // nukta
     inp = inp.replace(/\\u0027/g, "\\u0027"); // avagraha
     // DANDAS
-    inp = inp.replace(/\\u007c/g, "\u0964"); //|
-    inp = inp.replace(/\u0964\u0964/g, "\u0965"); //||
+    inp = inp.replace(/\\u007c/g, "|"); //|
+    inp = inp.replace(/\u0964\u0964/g, "||"); //||
     // TOP ACCENTS
     inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0060\\u0029/g, "\\u1cdb") // ^(```)
     inp = inp.replace(/\\u005e\\u0028\\u0060\\u0060\\u0029/g, "\\u1cda") // ^(``)
@@ -739,6 +743,11 @@
     inp = inp.replace(/\\u0037/g, "\\u0aed"); // 7
     inp = inp.replace(/\\u0038/g, "\\u0aee"); // 8
     inp = inp.replace(/\\u0039/g, "\\u0aef"); // 9
+	
+	
+	//asterisk handling
+	inp = inp.replace(/\\u0023/g, "");
+	
     //print output
     document.getElementById("Gujarati").innerHTML = fromGuju(inp);
   }
@@ -949,7 +958,11 @@
     inp = inp.replace(/\\u0036/g, "\\u0c6c"); // 6
     inp = inp.replace(/\\u0037/g, "\\u0c6d"); // 7
     inp = inp.replace(/\\u0038/g, "\\u0c6e"); // 8
-    inp = inp.replace(/\\u0039/g, "\\u0c6f"); // 9
+    inp = inp.replace(/\\u0039/g, "\\u0c6f"); // 9	
+	
+	//asterisk handling
+	inp = inp.replace(/\\u0023/g, "");
+	
     //print output
     document.getElementById("Telugu").innerHTML = fromTelugu(inp);
   }
@@ -1169,7 +1182,11 @@
     inp = inp.replace(/\\u0036/g, "𑁬"); // 6
     inp = inp.replace(/\\u0037/g, "𑁭"); // 7
     inp = inp.replace(/\\u0038/g, "𑁮"); // 8
-    inp = inp.replace(/\\u0039/g, "𑁯"); // 9
+    inp = inp.replace(/\\u0039/g, "𑁯"); // 9	
+	
+	//asterisk handling
+	inp = inp.replace(/\\u0023/g, "");
+	
     //print output
     document.getElementById("Brahmi").innerHTML = fromUni(inp);
   }
