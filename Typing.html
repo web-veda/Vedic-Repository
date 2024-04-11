@@ -57,7 +57,7 @@
 <body>
   <div id="container">
     <div class="BOX">
-      <textarea id="romin" placeholder="Type here" oninput="toDevanagari(); toIASTtext(); toGujarati(); toTelu(); toBrahmi()" spellcheck="false"></textarea>
+      <textarea id="romin" placeholder="Type here" oninput="toDevanagari(); toIASTtext(); toGujarati(); toTelu(); toBrahmi();" onkeyup="syncCaret()" onclick="syncCaret()" spellcheck="false"></textarea>
       <div class="grid-container">
         <textarea id="devout" placeholder="Devanagari" readonly></textarea>
         <textarea id="IAST" placeholder="IAST" readonly></textarea>
@@ -1206,6 +1206,40 @@
       return String.fromCharCode(parseInt(match.replace(/\\u/g, ""), 16));
     });
   }
+
+	function syncCaret() {
+            const romin = document.getElementById('romin');
+            const devout = document.getElementById('devout');
+            const IAST = document.getElementById('IAST');
+            const Gujarati = document.getElementById('Gujarati');
+            const Telugu = document.getElementById('Telugu');
+            const Brahmi = document.getElementById('Brahmi');
+    
+    devout.selectionStart = romin.selectionStart;
+            devout.selectionEnd = romin.selectionEnd;
+    devout.focus(); // Focuses the second box temporarily
+    
+    IAST.selectionStart = romin.selectionStart;
+            IAST.selectionEnd = romin.selectionEnd;
+    IAST.focus(); // Focuses the second box temporarily
+    
+    Gujarati.selectionStart = romin.selectionStart;
+            Gujarati.selectionEnd = romin.selectionEnd;
+    Gujarati.focus(); // Focuses the second box temporarily
+    
+    Telugu.selectionStart = romin.selectionStart;
+            Telugu.selectionEnd = romin.selectionEnd;
+    Telugu.focus(); // Focuses the second box temporarily
+    
+    Brahmi.selectionStart = romin.selectionStart;
+            Brahmi.selectionEnd = romin.selectionEnd;
+    Brahmi.focus(); // Focuses the second box temporarily
+
+            // Sets a timeout to re-focus back to the first box to allow continuous typing
+            setTimeout(() => {
+                romin.focus();
+            }, 0);
+        }
 </script>
 
 </html>
