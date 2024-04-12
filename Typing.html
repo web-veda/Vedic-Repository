@@ -276,6 +276,9 @@
     inp = inp.replace(/\\u003c/g, "\\u2018");
     inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
     inp = inp.replace(/\\u003e/g, "\\u2019");
+    //dash length handling
+    inp = inp.replace(/\\u002d\\u002d\\u002d/g, "\\u2014");
+    inp = inp.replace(/\\u002d\\u002d/g, "\\u2013");
     //print output
     document.getElementById("devout").innerHTML = fromUni(inp);
   }
@@ -548,6 +551,9 @@
     inp = inp.replace(/\\u003c/g, "\\u2018");
     inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
     inp = inp.replace(/\\u003e/g, "\\u2019");
+    //dash length handling
+    inp = inp.replace(/\\u002d\\u002d\\u002d/g, "\\u2014");
+    inp = inp.replace(/\\u002d\\u002d/g, "\\u2013");
     //print output
     document.getElementById("IAST").innerHTML = fromIAST(inp);
   }
@@ -766,6 +772,9 @@
     inp = inp.replace(/\\u003c/g, "\\u2018");
     inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
     inp = inp.replace(/\\u003e/g, "\\u2019");
+    //dash length handling
+    inp = inp.replace(/\\u002d\\u002d\\u002d/g, "\\u2014");
+    inp = inp.replace(/\\u002d\\u002d/g, "\\u2013");
     //print output
     document.getElementById("Gujarati").innerHTML = fromGuju(inp);
   }
@@ -984,6 +993,9 @@
     inp = inp.replace(/\\u003c/g, "\\u2018");
     inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
     inp = inp.replace(/\\u003e/g, "\\u2019");
+    //dash length handling
+    inp = inp.replace(/\\u002d\\u002d\\u002d/g, "\\u2014");
+    inp = inp.replace(/\\u002d\\u002d/g, "\\u2013");
     //print output
     document.getElementById("Telugu").innerHTML = fromTelugu(inp);
   }
@@ -1211,6 +1223,9 @@
   //   inp = inp.replace(/\\u003c/g, "\\u2018");
   //   inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
   //   inp = inp.replace(/\\u003e/g, "\\u2019");
+  //   //dash length handling
+  //   inp = inp.replace(/\\u002d\\u002d\\u002d/g, "\\u2014");
+  //   inp = inp.replace(/\\u002d\\u002d/g, "\\u2013");
   //   //print output
   //   document.getElementById("Brahmi").innerHTML = fromUni(inp);
   // }
