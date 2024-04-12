@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="styles.css">
-<!--   <link rel="stylesheet" type="text/css" href="siddhanta.ttf"> -->
+  <!--   <link rel="stylesheet" type="text/css" href="siddhanta.ttf"> -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" />
@@ -16,10 +16,10 @@
     }
 
     @font-face {
-    font-family: 'Siddhanta';
-    src: url('siddhanta1.ttf') format('truetype');
-    /* Add more src lines for different formats if needed */
-}
+      font-family: 'Siddhanta';
+      src: url('siddhanta1.ttf') format('truetype');
+      /* Add more src lines for different formats if needed */
+    }
 
     .grid-container {
       display: grid;
@@ -28,29 +28,40 @@
       width: 100%;
     }
 
-    #romin,#devout,#IAST,#Gujarati,#Telugu,#Brahmi {
+    #romin,
+    #devout,
+    #IAST,
+    #Gujarati,
+    #Telugu,
+    #Brahmi {
       width: 100%;
       padding: 10px;
       text-align: left;
       height: 33.33vh;
-      }
+    }
+
     #Gujarati {
       font-family: 'Noto Sans Gujarati', sans-serif;
       font-size: 12px;
-      }
+    }
+
     #Telugu {
       font-family: 'Noto Sans Telugu', sans-serif;
-      }
+    }
+
     #devout {
       font-family: 'Siddhanta', sans-serif;
       font-size: 12px;
-      }
+    }
+
     #Brahmi {
       font-family: 'Noto Sans Brahmi', sans-serif;
-      }
-    #romin,#IAST {
+    }
+
+    #romin,
+    #IAST {
       font-family: 'Noto Sans', sans-serif;
-      }
+    }
   </style>
 </head>
 
@@ -261,10 +272,13 @@
     inp = inp.replace(/\\u0037/g, "\\u096d"); // 7
     inp = inp.replace(/\\u0038/g, "\\u096e"); // 8
     inp = inp.replace(/\\u0039/g, "\\u096f"); // 9
-	
-	//asterisk handling
-	inp = inp.replace(/\\u0023/g, "");
-	
+    //asterisk handling
+    inp = inp.replace(/\\u0023/g, "");
+    //Quotation marks
+    inp = inp.replace(/\\u003c\\u003c/g, "\\u201c");
+    inp = inp.replace(/\\u003c/g, "\\u2018");
+    inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
+    inp = inp.replace(/\\u003e/g, "\\u2019");
     //print output
     document.getElementById("devout").innerHTML = fromUni(inp);
   }
@@ -532,6 +546,11 @@
     inp = inp.replace(/\\u0037/g, "7"); // 7
     inp = inp.replace(/\\u0038/g, "8"); // 8
     inp = inp.replace(/\\u0039/g, "9"); // 9
+    //Quotation marks
+    inp = inp.replace(/\\u003c\\u003c/g, "\\u201c");
+    inp = inp.replace(/\\u003c/g, "\\u2018");
+    inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
+    inp = inp.replace(/\\u003e/g, "\\u2019");
     //print output
     document.getElementById("IAST").innerHTML = fromIAST(inp);
   }
@@ -743,11 +762,13 @@
     inp = inp.replace(/\\u0037/g, "\\u0aed"); // 7
     inp = inp.replace(/\\u0038/g, "\\u0aee"); // 8
     inp = inp.replace(/\\u0039/g, "\\u0aef"); // 9
-	
-	
-	//asterisk handling
-	inp = inp.replace(/\\u0023/g, "");
-	
+    //asterisk handling
+    inp = inp.replace(/\\u0023/g, "");
+    //Quotation marks
+    inp = inp.replace(/\\u003c\\u003c/g, "\\u201c");
+    inp = inp.replace(/\\u003c/g, "\\u2018");
+    inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
+    inp = inp.replace(/\\u003e/g, "\\u2019");
     //print output
     document.getElementById("Gujarati").innerHTML = fromGuju(inp);
   }
@@ -959,10 +980,13 @@
     inp = inp.replace(/\\u0037/g, "\\u0c6d"); // 7
     inp = inp.replace(/\\u0038/g, "\\u0c6e"); // 8
     inp = inp.replace(/\\u0039/g, "\\u0c6f"); // 9	
-	
-	//asterisk handling
-	inp = inp.replace(/\\u0023/g, "");
-	
+    //asterisk handling
+    inp = inp.replace(/\\u0023/g, "");
+    //Quotation marks
+    inp = inp.replace(/\\u003c\\u003c/g, "\\u201c");
+    inp = inp.replace(/\\u003c/g, "\\u2018");
+    inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
+    inp = inp.replace(/\\u003e/g, "\\u2019");
     //print output
     document.getElementById("Telugu").innerHTML = fromTelugu(inp);
   }
@@ -992,7 +1016,7 @@
     }
   });
 
-    function toBrahmi() {
+  function toBrahmi() {
     "use strict"
     //get input and convert to hex
     var inp = toUni(document.getElementById("romin").value);
@@ -1183,10 +1207,13 @@
     inp = inp.replace(/\\u0037/g, "𑁭"); // 7
     inp = inp.replace(/\\u0038/g, "𑁮"); // 8
     inp = inp.replace(/\\u0039/g, "𑁯"); // 9	
-	
-	//asterisk handling
-	inp = inp.replace(/\\u0023/g, "");
-	
+    //asterisk handling
+    inp = inp.replace(/\\u0023/g, "");
+    //Quotation marks
+    inp = inp.replace(/\\u003c\\u003c/g, "\\u201c");
+    inp = inp.replace(/\\u003c/g, "\\u2018");
+    inp = inp.replace(/\\u003e\\u003e/g, "\\u201d");
+    inp = inp.replace(/\\u003e/g, "\\u2019");
     //print output
     document.getElementById("Brahmi").innerHTML = fromUni(inp);
   }
@@ -1207,39 +1234,33 @@
     });
   }
 
-	function syncCaret() {
-            const romin = document.getElementById('romin');
-            const devout = document.getElementById('devout');
-            const IAST = document.getElementById('IAST');
-            const Gujarati = document.getElementById('Gujarati');
-            const Telugu = document.getElementById('Telugu');
-            const Brahmi = document.getElementById('Brahmi');
-    
+  function syncCaret() {
+    const romin = document.getElementById('romin');
+    const devout = document.getElementById('devout');
+    const IAST = document.getElementById('IAST');
+    const Gujarati = document.getElementById('Gujarati');
+    const Telugu = document.getElementById('Telugu');
+    const Brahmi = document.getElementById('Brahmi');
     devout.selectionStart = romin.selectionStart;
-            devout.selectionEnd = romin.selectionEnd;
+    devout.selectionEnd = romin.selectionEnd;
     devout.focus(); // Focuses the second box temporarily
-    
     IAST.selectionStart = romin.selectionStart;
-            IAST.selectionEnd = romin.selectionEnd;
+    IAST.selectionEnd = romin.selectionEnd;
     IAST.focus(); // Focuses the second box temporarily
-    
     Gujarati.selectionStart = romin.selectionStart;
-            Gujarati.selectionEnd = romin.selectionEnd;
+    Gujarati.selectionEnd = romin.selectionEnd;
     Gujarati.focus(); // Focuses the second box temporarily
-    
     Telugu.selectionStart = romin.selectionStart;
-            Telugu.selectionEnd = romin.selectionEnd;
+    Telugu.selectionEnd = romin.selectionEnd;
     Telugu.focus(); // Focuses the second box temporarily
-    
     Brahmi.selectionStart = romin.selectionStart;
-            Brahmi.selectionEnd = romin.selectionEnd;
+    Brahmi.selectionEnd = romin.selectionEnd;
     Brahmi.focus(); // Focuses the second box temporarily
-
-            // Sets a timeout to re-focus back to the first box to allow continuous typing
-            setTimeout(() => {
-                romin.focus();
-            }, 0);
-        }
+    // Sets a timeout to re-focus back to the first box to allow continuous typing
+    setTimeout(() => {
+      romin.focus();
+    }, 0);
+  }
 </script>
 
 </html>
