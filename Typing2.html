@@ -148,6 +148,9 @@
     inp = inp.replace(/\\u0037/g, "\\u096d"); // 7
     inp = inp.replace(/\\u0038/g, "\\u096e"); // 8
     inp = inp.replace(/\\u0039/g, "\\u096f"); // 9
+    // DANDAS
+    inp = inp.replace(/\\u007c/g, "\u0964"); //|
+    inp = inp.replace(/\u0964\u0964/g, "\u0965"); //||
     // Print Output
     document.getElementById("TransDevan").value = fromUni(inp);
     // Functions for conversion
@@ -258,7 +261,9 @@
     inp = inp.replace(/\\u0036/g, "\\u0aec"); // 6
     inp = inp.replace(/\\u0037/g, "\\u0aed"); // 7
     inp = inp.replace(/\\u0038/g, "\\u0aee"); // 8
-    inp = inp.replace(/\\u0039/g, "\\u0aef"); // 9
+    inp = inp.replace(/\\u0039/g, "\\u0aef"); // 9// DANDAS
+    inp = inp.replace(/\\u007c/g, "\u0964"); //|
+    inp = inp.replace(/\u0964\u0964/g, "\u0965"); //||
     // Print Output
     document.getElementById("TransGujar").value = fromUni(inp);
     // Functions for conversion
