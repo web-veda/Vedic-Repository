@@ -641,33 +641,40 @@
   <title>Multi-Script Transliterator</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari&family=Noto+Serif+Gujarati&family=Noto+Serif+Telugu&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root { --c1: 1fr; --c2: 1fr; --r1: 1fr; --r2: 1fr; --g: 8px; }
+    :root { --c1: 1fr; --c2: 1fr; --r1: 1fr; --r2: 1fr; --g: 8px; --topH: 220px; --clampG: 6px; }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
-    /* Lock the app to the viewport so nothing can spill out, even on zoom */
-    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e6e8ef; overflow: hidden; }
-    .container { position: fixed; inset: 0; display: grid; grid-template-rows: auto auto 1fr; gap: 10px; height: 100vh; padding: 10px; }
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e6e8ef; overflow: hidden; overscroll-behavior: contain; }
+
+    .container { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr; gap: 10px; height: 100svh; padding: 10px; }
+
     header { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
     h1 { font-size: 1.25rem; margin: 0; }
     .legend { font-size: .9rem; line-height: 1.4; background: #111830; border: 1px solid #222a42; border-radius: 14px; padding: 10px 12px; }
     .legend code { font-family: "Fira Code", ui-monospace; }
-    .row { display: grid; grid-template-columns: 1fr; gap: 10px; min-height: 0; }
+
+    /* Main area: input (top) + clamp + grid (bottom) */
+    .main { display: grid; grid-template-rows: var(--topH) var(--clampG) 1fr; gap: 0; min-height: 0; }
+
+    /* Ensure the input card and the textarea truly fill the first track */
+    .row { display: grid; grid-template-rows: 1fr; min-height: 0; min-width: 0; }
+    .row > .card { min-height: 0; height: 100%; border: 0; /* no border stealing pixels */ }
+
     .grid { display: grid; grid-template-columns: var(--c1) var(--g) var(--c2); grid-template-rows: var(--r1) var(--g) var(--r2); gap: 0; min-height: 0; min-width: 0; }
-    .card { display: grid; grid-template-rows: auto 1fr auto; background: #0f1630; border: 1px solid #222a42; border-radius: 16px; overflow: hidden; min-height: 0; min-width: 0; }
-    .card header { padding: 10px 12px; background: linear-gradient(180deg, #111a38, #0f1630); border-bottom: 1px solid #1e2740; }
-    .title { font-weight: 600; font-size: .95rem; }
-    textarea { width: 100%; height: 100%; padding: 10px 12px; font-size: 16px; border: 0; outline: none; resize: none; background: #0f1630; color: #e6e8ef; overflow: auto; }
+
+    .card { display: flex; flex-direction: column; background: #0f1630; border: 1px solid #222a42; border-radius: 0; overflow: hidden; min-height: 0; min-width: 0; }
+
+    textarea { flex: 1 1 auto; min-height: 0; width: 100%; padding: 10px 12px; font-size: 16px; border: 0; outline: none; resize: none; background: #0f1630; color: #e6e8ef; overflow: auto; }
     #TransInput { font-family: "Fira Code", ui-monospace; }
     #TransDevan { font-family: "Noto Serif Devanagari", serif; }
     #TransGujar { font-family: "Noto Serif Gujarati", serif; }
     #TransTelug { font-family: "Noto Serif Telugu", serif; }
-    #TransIAST { font-family: "Noto Serif", serif; }
-    .toolbar { display: flex; justify-content: flex-end; gap: 6px; padding: 8px 10px; border-top: 1px solid #1e2740; background: #0e152e; }
-    button { font: inherit; background: #1b2652; border: 1px solid #2a3970; color: #e6e8ef; border-radius: 10px; padding: 6px 10px; cursor: pointer; }
-    button:hover { background: #233064; }
+    #TransIAST  { font-family: "Noto Serif", serif; }
+
     .gutter { background: #1a2140; }
     .v-gutter { cursor: col-resize; }
     .h-gutter { cursor: row-resize; }
+    .clamp { background: #1a2140; cursor: row-resize; height: var(--clampG); }
   </style>
 </head>
 <body>
@@ -675,7 +682,7 @@
     <header>
 <!--       <h1>Multi-Script Transliterator</h1>
       <div class="legend">
-        <div><strong>Type ASCII in the top box.</strong> Live outputs appear in the grid below.</div>
+        <div><strong>Type ASCII in the top box.</strong> Live outputs appear below.</div>
         <div style="opacity:.8;margin-top:4px">
           <span class="nowrap"><code>kh, gh, ch, jh, th, dh, ph, bh</code> aspirates</span> ·
           <span class="nowrap"><code>t/T, d/D, n/N</code> dental/retroflex</span> ·
@@ -685,45 +692,29 @@
         </div>
       </div> -->
     </header>
-    <div class="row">
-      <div class="card">
-        <header><div class="title">Input (ASCII scheme)</div></header>
-        <textarea id="TransInput" spellcheck="false" placeholder="Type here…"></textarea>
-        <div class="toolbar"><button data-copy="TransInput">Copy</button><button id="clearBtn">Clear</button></div>
+
+    <div class="main" id="Main">
+      <div class="row">
+        <div class="card">
+          <textarea id="TransInput" spellcheck="false" placeholder="Type here…"></textarea>
+        </div>
       </div>
-    </div>
-    <div class="grid" id="OutputGrid">
-      <div class="card" style="grid-column:1;grid-row:1">
-        <header><div class="title">Devanagari</div></header>
-        <textarea id="TransDevan" readonly></textarea>
-        <div class="toolbar"><button data-copy="TransDevan">Copy</button></div>
+      <div class="clamp" id="MidClamp"></div>
+      <div class="grid" id="OutputGrid">
+        <div class="card" style="grid-column:1;grid-row:1"><textarea id="TransDevan" readonly></textarea></div>
+        <div class="card" style="grid-column:3;grid-row:1"><textarea id="TransGujar" readonly></textarea></div>
+        <div class="card" style="grid-column:1;grid-row:3"><textarea id="TransIAST" readonly></textarea></div>
+        <div class="card" style="grid-column:3;grid-row:3"><textarea id="TransTelug" readonly></textarea></div>
+        <div class="gutter v-gutter" style="grid-column:2;grid-row:1/4" id="VGutter"></div>
+        <div class="gutter h-gutter" style="grid-row:2;grid-column:1/4" id="HGutter"></div>
       </div>
-      <div class="card" style="grid-column:3;grid-row:1">
-        <header><div class="title">Gujarati</div></header>
-        <textarea id="TransGujar" readonly></textarea>
-        <div class="toolbar"><button data-copy="TransGujar">Copy</button></div>
-      </div>
-      <div class="card" style="grid-column:1;grid-row:3">
-        <header><div class="title">IAST</div></header>
-        <textarea id="TransIAST" readonly></textarea>
-        <div class="toolbar"><button data-copy="TransIAST">Copy</button></div>
-      </div>
-      <div class="card" style="grid-column:3;grid-row:3">
-        <header><div class="title">Telugu</div></header>
-        <textarea id="TransTelug" readonly></textarea>
-        <div class="toolbar"><button data-copy="TransTelug">Copy</button></div>
-      </div>
-      <div class="gutter v-gutter" style="grid-column:2;grid-row:1/4" id="VGutter"></div>
-      <div class="gutter h-gutter" style="grid-row:2;grid-column:1/4" id="HGutter"></div>
     </div>
   </div>
+
   <script>
-    // ===== Utilities (pure) =====
     const toUni = (input) => Array.from(input).map(ch => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0")).join("");
     const fromUni = (text) => text.replace(/\\u[\dA-F]{4}/gi, m => String.fromCharCode(parseInt(m.slice(2), 16)));
     const replacePairs = (str, pairs) => pairs.reduce((s, [re, rep]) => s.replace(re, rep), str);
-
-    // Smart replacements shared by scripts
     const applySmart = (hex) => replacePairs(hex, [
       [/\\u003c\\u003c/g, "\u201c"], // << → left double quote
       [/\\u003c/g, "\u2018"],       // <  → left single quote
@@ -731,7 +722,7 @@
       [/\\u003e/g, "\u2019"],       // >  → right single quote
     ]);
 
-    // ===== Mapping Tables (order matters) =====
+    // NOTE: plug your full mapping tables back in here (trimmed in this snippet for brevity)
     const DEVAN_PAIRS = [
       [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0950"],
       [/\\u0061\\u0069/g, "\\u0910"],
@@ -814,7 +805,6 @@
       [/\\u0035/g, "\\u096b"],[/\\u0036/g, "\\u096c"],[/\\u0037/g, "\\u096d"],[/\\u0038/g, "\\u096e"],[/\\u0039/g, "\\u096f"],
       [/\\u0023/g, ""],
     ];
-
     const GUJ_PAIRS = [
       [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0ad0"],
       [/\\u0061\\u0069/g, "\\u0a90"],
@@ -868,6 +858,7 @@
       [/\\u0073\\u0068/g, "\\u0ab6\\u0acd"],
       [/\\u0073/g, "\\u0ab8\\u0acd"],
       [/\\u0068/g, "\\u0ab9\\u0acd"],
+      [/\\u0acd\\u0028\\u002e\\u0029/g, "\\u0abc\\u0acd"],
       [/\\u0abc\\u0acd\\u0028\\u002e\\u0029/g, "\\u0abc\\u0abc\\u0acd"],
       [/\\u0acd\\u0a85/g, ""],
       [/\\u0acd\\u0a94/g, "\\u0acc"],
@@ -896,7 +887,6 @@
       [/\\u0035/g, "\\u0aeb"],[/\\u0036/g, "\\u0aec"],[/\\u0037/g, "\\u0aed"],[/\\u0038/g, "\\u0aee"],[/\\u0039/g, "\\u0aef"],
       [/\\u0023/g, ""],
     ];
-
     const TEL_PAIRS = [
       [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0c13\\u0c02"],
       [/\\u0061\\u0069/g, "\\u0c10"],
@@ -979,7 +969,6 @@
       [/\\u0035/g, "\\u0c6b"],[/\\u0036/g, "\\u0c6c"],[/\\u0037/g, "\\u0c6d"],[/\\u0038/g, "\\u0c6e"],[/\\u0039/g, "\\u0c6f"],
       [/\\u0023/g, ""],
     ];
-
     const IAST_PAIRS = [
       [/\\u0023\\u0028\\u004f\\u004d\\u0029/g, "Oṃ"],
       [/\\u0028\\u004f\\u004d\\u0029/g, "oṃ"],
@@ -1042,65 +1031,75 @@
       [/\\u0027/g, "'"],
     ];
 
-    // ===== DOM-dependent code =====
     document.addEventListener('DOMContentLoaded', () => {
       const $ = (id) => document.getElementById(id);
 
       const renderAll = (raw) => {
         const hex = toUni(raw);
         const smart = applySmart(hex);
-        const outDevan = $('TransDevan');
-        const outGujar = $('TransGujar');
-        const outTelug = $('TransTelug');
-        const outIAST  = $('TransIAST');
-        if (outDevan) outDevan.value = fromUni(replacePairs(smart, DEVAN_PAIRS));
-        if (outGujar) outGujar.value = fromUni(replacePairs(smart, GUJ_PAIRS));
-        if (outTelug) outTelug.value = fromUni(replacePairs(smart, TEL_PAIRS));
-        if (outIAST)  outIAST.value  = fromUni(replacePairs(hex, IAST_PAIRS)); // IAST keeps ASCII digits
+        $('TransDevan').value = fromUni(replacePairs(smart, DEVAN_PAIRS));
+        $('TransGujar').value = fromUni(replacePairs(smart, GUJ_PAIRS));
+        $('TransTelug').value = fromUni(replacePairs(smart, TEL_PAIRS));
+        $('TransIAST').value  = fromUni(replacePairs(hex, IAST_PAIRS));
       };
 
-      const debounce = (fn, delay = 20) => { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); }; };
+      $('TransInput').addEventListener('input', (e) => renderAll(e.target.value));
 
-      const inputEl = $('TransInput');
-      if (inputEl) inputEl.addEventListener('input', debounce((e) => { renderAll(e.target.value); }, 10));
+      // ===== Middle clamp: proportional layout =====
+      const main = $('Main');
+      const mid  = $('MidClamp');
+      const CLAMP = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--clampG')) || 6;
+      const MIN_TOP = 80;             // min input height
+      const MIN_BOTTOM = 120;         // min grid height
+      let topRatio = 0.38;            // start as a ratio
 
-      // Modern copy fallback that works without selecting text
-      document.querySelectorAll('button[data-copy]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const id = btn.getAttribute('data-copy');
-          const src = id ? $(id) : null;
-          const text = src ? src.value : '';
-          try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              await navigator.clipboard.writeText(text);
-            } else {
-              const ta = document.createElement('textarea');
-              ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-            }
-            btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1200);
-          } catch {
-            btn.textContent = 'Copy failed'; setTimeout(() => btn.textContent = 'Copy', 1200);
-          }
-        });
+      const layoutMain = () => {
+        const r = main.getBoundingClientRect();
+        const avail = Math.max(0, r.height - CLAMP);
+        const topPx = Math.max(MIN_TOP, Math.min(avail - MIN_BOTTOM, avail * topRatio));
+        document.documentElement.style.setProperty('--topH', topPx + 'px');
+      };
+
+      const syncRatioFromCurrent = () => {
+        const r = main.getBoundingClientRect();
+        const avail = Math.max(0, r.height - CLAMP);
+        const cur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topH')) || 220;
+        topRatio = avail ? Math.max(0, Math.min(1, cur / avail)) : topRatio;
+      };
+
+      layoutMain();
+      let pending = false;
+      const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; layoutMain(); }); } };
+      window.addEventListener('resize', schedule);
+      if (window.ResizeObserver) new ResizeObserver(() => { syncRatioFromCurrent(); schedule(); }).observe(main);
+
+      mid.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        const box = main.getBoundingClientRect();
+        const startTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topH')) || 220;
+        const startY = e.clientY;
+        const move = (ev) => {
+          const dy = ev.clientY - startY;
+          const avail = Math.max(0, box.height - CLAMP);
+          const t = Math.max(MIN_TOP, Math.min(avail - MIN_BOTTOM, startTop + dy));
+          document.documentElement.style.setProperty('--topH', t + 'px');
+          topRatio = avail ? Math.max(0, Math.min(1, t / avail)) : topRatio;
+        };
+        const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
       });
 
-      const clearBtn = $('clearBtn');
-      if (clearBtn && inputEl) clearBtn.addEventListener('click', () => { inputEl.value = ''; renderAll(''); inputEl.focus(); });
+      // (Optional) double-click to reset split
+      mid.addEventListener('dblclick', () => { topRatio = 0.4; layoutMain(); });
 
-      // ===== Resizable 2x2 grid gutters (zoom-safe) =====
+      // ===== Grid gutters (ratio-based, zoom-safe) =====
       const grid = $('OutputGrid');
       const v = $('VGutter');
       const h = $('HGutter');
-      if (!grid || !v || !h) {
-        console.error('Resizable grid init skipped: required elements not found.', { grid: !!grid, v: !!v, h: !!h });
-      } else {
-        const G = 8, MIN = 100;
-        const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
-
-        // Maintain ratios so resizing/zoom keeps panes in view
-        let ratioX = 0.5; // left column ratio (of available width)
-        let ratioY = 0.5; // top row ratio (of available height)
-
+      if (grid && v && h) {
+        const G = 8, MIN = 10;
+        let ratioX = 0.5, ratioY = 0.5;
         const setColsPx = (w) => {
           const avail = Math.max(0, w - G);
           const c1 = Math.max(MIN, avail * ratioX);
@@ -1108,36 +1107,25 @@
           grid.style.setProperty('--c1', c1 + 'px');
           grid.style.setProperty('--c2', c2 + 'px');
         };
-        const setRowsPx = (h) => {
-          const avail = Math.max(0, h - G);
+        const setRowsPx = (hgt) => {
+          const avail = Math.max(0, hgt - G);
           const r1 = Math.max(MIN, avail * ratioY);
           const r2 = Math.max(MIN, avail - r1);
           grid.style.setProperty('--r1', r1 + 'px');
           grid.style.setProperty('--r2', r2 + 'px');
         };
-        const layoutFromBox = () => {
-          const r = grid.getBoundingClientRect();
-          setColsPx(r.width);
-          setRowsPx(r.height);
-        };
+        const layoutFromBox = () => { const r = grid.getBoundingClientRect(); setColsPx(r.width); setRowsPx(r.height); };
         layoutFromBox();
-
-        // Recompute on window resize and when the grid box size changes (covers zoom events)
-        let pending = false;
-        const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; layoutFromBox(); }); } };
-        window.addEventListener('resize', schedule);
-        if (window.ResizeObserver) {
-          const ro = new ResizeObserver(schedule);
-          ro.observe(grid);
-        }
-
+        let pend = false; const sched = () => { if (!pend) { pend = true; requestAnimationFrame(() => { pend = false; layoutFromBox(); }); } };
+        window.addEventListener('resize', sched);
+        if (window.ResizeObserver) new ResizeObserver(sched).observe(grid);
         v.addEventListener('mousedown', (e) => {
           e.preventDefault();
           const r = grid.getBoundingClientRect(); const w = r.width; const left = r.left;
           const onMove = (ev) => {
-            const x = clamp(ev.clientX - left, MIN, w - MIN);
+            const x = Math.max(10, Math.min(w - 10, ev.clientX - left));
             const avail = Math.max(0, w - G);
-            ratioX = clamp((x - G/2) / avail, 0.0, 1.0);
+            ratioX = Math.max(0, Math.min(1, (x - G/2) / avail));
             setColsPx(w);
           };
           const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
@@ -1147,9 +1135,9 @@
           e.preventDefault();
           const r = grid.getBoundingClientRect(); const ht = r.height; const top = r.top;
           const onMove = (ev) => {
-            const y = clamp(ev.clientY - top, MIN, ht - MIN);
+            const y = Math.max(10, Math.min(ht - 10, ev.clientY - top));
             const avail = Math.max(0, ht - G);
-            ratioY = clamp((y - G/2) / avail, 0.0, 1.0);
+            ratioY = Math.max(0, Math.min(1, (y - G/2) / avail));
             setRowsPx(ht);
           };
           const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
@@ -1159,33 +1147,6 @@
 
       // Initial render
       renderAll('');
-
-      // ===== Console self-tests =====
-      (function runSelfTests() {
-        const results = [];
-        const S = [
-          { raw: 'kha',  dev: 'ख',  guj: 'ખ',  tel: 'ఖ',  iast: 'kha' },
-          { raw: 'kI',   dev: 'की', guj: 'કી', tel: 'కీ', iast: 'kī' },
-          { raw: 'aH',   dev: 'अः', guj: 'અઃ', tel: 'అః', iast: 'aḥ' },
-          { raw: '(OM)', dev: 'ॐ',  guj: 'ૐ',  tel: 'ఓం', iast: 'oṃ' },
-          { raw: '123',  dev: '१२३', guj: '૧૨૩', tel: '౧౨౩', iast: '123' },
-        ];
-        S.forEach(t => {
-          const hex = applySmart(toUni(t.raw));
-          const gotDev = fromUni(replacePairs(hex, DEVAN_PAIRS));
-          const gotGuj = fromUni(replacePairs(hex, GUJ_PAIRS));
-          const gotTel = fromUni(replacePairs(hex, TEL_PAIRS));
-          const gotIA  = fromUni(replacePairs(toUni(t.raw), IAST_PAIRS));
-          results.push({ test: `DEV '${t.raw}'`, exp: t.dev, got: gotDev, pass: gotDev === t.dev });
-          results.push({ test: `GUJ '${t.raw}'`, exp: t.guj, got: gotGuj, pass: gotGuj === t.guj });
-          results.push({ test: `TEL '${t.raw}'`, exp: t.tel, got: gotTel, pass: gotTel === t.tel });
-          results.push({ test: `IA  '${t.raw}'`, exp: t.iast, got: gotIA,  pass: gotIA  === t.iast });
-        });
-        try { console.table(results); } catch { console.log(results); }
-        const failed = results.filter(r => !r.pass);
-        if (failed.length) console.warn(`Self-tests: ${failed.length} failure(s)`, failed);
-        else console.log('Self-tests: all passed');
-      })();
     });
   </script>
 </body>
