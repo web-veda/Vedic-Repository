@@ -672,7 +672,7 @@
 </head>
 <body>
   <div class="container">
-<!--     <header>
+    <header>
       <h1>Multi-Script Transliterator</h1>
       <div class="legend">
         <div><strong>Type ASCII in the top box.</strong> Live outputs appear in the grid below.</div>
@@ -684,7 +684,7 @@
           <span class="nowrap"><code>(OM)</code> = Om</span>
         </div>
       </div>
-    </header> -->
+    </header>
     <div class="row">
       <div class="card">
         <header><div class="title">Input (ASCII scheme)</div></header>
@@ -1094,7 +1094,7 @@
       if (!grid || !v || !h) {
         console.error('Resizable grid init skipped: required elements not found.', { grid: !!grid, v: !!v, h: !!h });
       } else {
-        const G = 8, MIN = 421;
+        const G = 8, MIN = 100;
         const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
 
         // Maintain ratios so resizing/zoom keeps panes in view
