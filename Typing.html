@@ -646,7 +646,7 @@
     html, body { height: 100%; margin: 0; }
     /* Lock the app to the viewport so nothing can spill out, even on zoom */
     body { font-family: system-ui, sans-serif; background: #0b1020; color: #e6e8ef; overflow: hidden; }
-    .container { position: fixed; inset: 0; display: grid; grid-template-rows: auto auto 1fr; gap: 10px; height: 100svh; padding: 10px; }
+    .container { position: fixed; inset: 0; display: grid; grid-template-rows: auto auto 1fr; gap: 10px; height: 100vh; padding: 10px; }
     header { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
     h1 { font-size: 1.25rem; margin: 0; }
     .legend { font-size: .9rem; line-height: 1.4; background: #111830; border: 1px solid #222a42; border-radius: 14px; padding: 10px 12px; }
@@ -1094,7 +1094,7 @@
       if (!grid || !v || !h) {
         console.error('Resizable grid init skipped: required elements not found.', { grid: !!grid, v: !!v, h: !!h });
       } else {
-        const G = 8, MIN = 100;
+        const G = 8, MIN = 421;
         const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
 
         // Maintain ratios so resizing/zoom keeps panes in view
