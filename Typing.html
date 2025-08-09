@@ -1,4 +1,4 @@
-<html lang="en">
+<!-- <html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -623,4 +623,570 @@
   }
 </script>
 
+</html>
+ -->
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multi-Script Transliterator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari&family=Noto+Serif+Gujarati&family=Noto+Serif+Telugu&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --c1: 1fr; --c2: 1fr; --r1: 1fr; --r2: 1fr; --g: 8px; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    /* Lock the app to the viewport so nothing can spill out, even on zoom */
+    body { font-family: system-ui, sans-serif; background: #0b1020; color: #e6e8ef; overflow: hidden; }
+    .container { position: fixed; inset: 0; display: grid; grid-template-rows: auto auto 1fr; gap: 10px; height: 100svh; padding: 10px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
+    h1 { font-size: 1.25rem; margin: 0; }
+    .legend { font-size: .9rem; line-height: 1.4; background: #111830; border: 1px solid #222a42; border-radius: 14px; padding: 10px 12px; }
+    .legend code { font-family: "Fira Code", ui-monospace; }
+    .row { display: grid; grid-template-columns: 1fr; gap: 10px; min-height: 0; }
+    .grid { display: grid; grid-template-columns: var(--c1) var(--g) var(--c2); grid-template-rows: var(--r1) var(--g) var(--r2); gap: 0; min-height: 0; min-width: 0; }
+    .card { display: grid; grid-template-rows: auto 1fr auto; background: #0f1630; border: 1px solid #222a42; border-radius: 16px; overflow: hidden; min-height: 0; min-width: 0; }
+    .card header { padding: 10px 12px; background: linear-gradient(180deg, #111a38, #0f1630); border-bottom: 1px solid #1e2740; }
+    .title { font-weight: 600; font-size: .95rem; }
+    textarea { width: 100%; height: 100%; padding: 10px 12px; font-size: 16px; border: 0; outline: none; resize: none; background: #0f1630; color: #e6e8ef; overflow: auto; }
+    #TransInput { font-family: "Fira Code", ui-monospace; }
+    #TransDevan { font-family: "Noto Serif Devanagari", serif; }
+    #TransGujar { font-family: "Noto Serif Gujarati", serif; }
+    #TransTelug { font-family: "Noto Serif Telugu", serif; }
+    #TransIAST { font-family: "Noto Serif", serif; }
+    .toolbar { display: flex; justify-content: flex-end; gap: 6px; padding: 8px 10px; border-top: 1px solid #1e2740; background: #0e152e; }
+    button { font: inherit; background: #1b2652; border: 1px solid #2a3970; color: #e6e8ef; border-radius: 10px; padding: 6px 10px; cursor: pointer; }
+    button:hover { background: #233064; }
+    .gutter { background: #1a2140; }
+    .v-gutter { cursor: col-resize; }
+    .h-gutter { cursor: row-resize; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Multi-Script Transliterator</h1>
+      <div class="legend">
+        <div><strong>Type ASCII in the top box.</strong> Live outputs appear in the grid below.</div>
+        <div style="opacity:.8;margin-top:4px">
+          <span class="nowrap"><code>kh, gh, ch, jh, th, dh, ph, bh</code> aspirates</span> ·
+          <span class="nowrap"><code>t/T, d/D, n/N</code> dental/retroflex</span> ·
+          <span class="nowrap"><code>ai, au</code> diphthongs</span> ·
+          <span class="nowrap"><code>-r, -R, -l, -L</code> vocalics</span> ·
+          <span class="nowrap"><code>(OM)</code> = Om</span>
+        </div>
+      </div>
+    </header>
+    <div class="row">
+      <div class="card">
+        <header><div class="title">Input (ASCII scheme)</div></header>
+        <textarea id="TransInput" spellcheck="false" placeholder="Type here…"></textarea>
+        <div class="toolbar"><button data-copy="TransInput">Copy</button><button id="clearBtn">Clear</button></div>
+      </div>
+    </div>
+    <div class="grid" id="OutputGrid">
+      <div class="card" style="grid-column:1;grid-row:1">
+        <header><div class="title">Devanagari</div></header>
+        <textarea id="TransDevan" readonly></textarea>
+        <div class="toolbar"><button data-copy="TransDevan">Copy</button></div>
+      </div>
+      <div class="card" style="grid-column:3;grid-row:1">
+        <header><div class="title">Gujarati</div></header>
+        <textarea id="TransGujar" readonly></textarea>
+        <div class="toolbar"><button data-copy="TransGujar">Copy</button></div>
+      </div>
+      <div class="card" style="grid-column:1;grid-row:3">
+        <header><div class="title">IAST</div></header>
+        <textarea id="TransIAST" readonly></textarea>
+        <div class="toolbar"><button data-copy="TransIAST">Copy</button></div>
+      </div>
+      <div class="card" style="grid-column:3;grid-row:3">
+        <header><div class="title">Telugu</div></header>
+        <textarea id="TransTelug" readonly></textarea>
+        <div class="toolbar"><button data-copy="TransTelug">Copy</button></div>
+      </div>
+      <div class="gutter v-gutter" style="grid-column:2;grid-row:1/4" id="VGutter"></div>
+      <div class="gutter h-gutter" style="grid-row:2;grid-column:1/4" id="HGutter"></div>
+    </div>
+  </div>
+  <script>
+    // ===== Utilities (pure) =====
+    const toUni = (input) => Array.from(input).map(ch => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0")).join("");
+    const fromUni = (text) => text.replace(/\\u[\dA-F]{4}/gi, m => String.fromCharCode(parseInt(m.slice(2), 16)));
+    const replacePairs = (str, pairs) => pairs.reduce((s, [re, rep]) => s.replace(re, rep), str);
+
+    // Smart replacements shared by scripts
+    const applySmart = (hex) => replacePairs(hex, [
+      [/\\u003c\\u003c/g, "\u201c"], // << → left double quote
+      [/\\u003c/g, "\u2018"],       // <  → left single quote
+      [/\\u003e\\u003e/g, "\u201d"], // >> → right double quote
+      [/\\u003e/g, "\u2019"],       // >  → right single quote
+    ]);
+
+    // ===== Mapping Tables (order matters) =====
+    const DEVAN_PAIRS = [
+      [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0950"],
+      [/\\u0061\\u0069/g, "\\u0910"],
+      [/\\u0061\\u0075/g, "\\u0914"],
+      [/\\u0061/g, "\\u0905"],
+      [/\\u0041/g, "\\u0906"],
+      [/\\u0069/g, "\\u0907"],
+      [/\\u0049/g, "\\u0908"],
+      [/\\u0075/g, "\\u0909"],
+      [/\\u0055/g, "\\u090a"],
+      [/\\u0065/g, "\\u090f"],
+      [/\\u006f/g, "\\u0913"],
+      [/\\u002d\\u0072/g, "\\u090b"],
+      [/\\u002d\\u0052/g, "\\u0960"],
+      [/\\u002d\\u006c/g, "\\u090c"],
+      [/\\u002d\\u004c/g, "\\u0961"],
+      [/\\u0028\\u0045\\u0029/g, "\\u090d"],
+      [/\\u0028\\u004f\\u0029/g, "\\u0911"],
+      [/\\u006b\\u0068/g, "\\u0916\\u094d"],
+      [/\\u0067\\u0068/g, "\\u0918\\u094d"],
+      [/\\u0043\\u0068/g, "\\u091b\\u094d"],
+      [/\\u0063\\u0068/g, "\\u091a\\u094d"],
+      [/\\u007a\\u0068/g, "\\u0979\\u094d"],
+      [/\\u006a\\u0068/g, "\\u091d\\u094d"],
+      [/\\u0054\\u0068/g, "\\u0920\\u094d"],
+      [/\\u0044\\u0068/g, "\\u0922\\u094d"],
+      [/\\u0074\\u0068/g, "\\u0925\\u094d"],
+      [/\\u0064\\u0068/g, "\\u0927\\u094d"],
+      [/\\u0070\\u0068/g, "\\u092b\\u094d"],
+      [/\\u0062\\u0068/g, "\\u092d\\u094d"],
+      [/\\u006b/g, "\\u0915\\u094d"],
+      [/\\u0067/g, "\\u0917\\u094d"],
+      [/\\u0047/g, "\\u0919\\u094d"],
+      [/\\u006a/g, "\\u091c\\u094d"],
+      [/\\u004a/g, "\\u091e\\u094d"],
+      [/\\u0054/g, "\\u091f\\u094d"],
+      [/\\u0044/g, "\\u0921\\u094d"],
+      [/\\u004e/g, "\\u0923\\u094d"],
+      [/\\u0074/g, "\\u0924\\u094d"],
+      [/\\u0064/g, "\\u0926\\u094d"],
+      [/\\u006e/g, "\\u0928\\u094d"],
+      [/\\u0070/g, "\\u092a\\u094d"],
+      [/\\u0062/g, "\\u092c\\u094d"],
+      [/\\u006d/g, "\\u092e\\u094d"],
+      [/\\u0079/g, "\\u092f\\u094d"],
+      [/\\u0072/g, "\\u0930\\u094d"],
+      [/\\u006c/g, "\\u0932\\u094d"],
+      [/\\u004c/g, "\\u0933\\u094d"],
+      [/\\u0076/g, "\\u0935\\u094d"],
+      [/\\u0053\\u0068/g, "\\u0937\\u094d"],
+      [/\\u0073\\u0068/g, "\\u0936\\u094d"],
+      [/\\u0073/g, "\\u0938\\u094d"],
+      [/\\u0068/g, "\\u0939\\u094d"],
+      [/\\u094d\\u0028\\u002e\\u0029/g, "\\u093c\\u094d"],
+      [/\\u093c\\u094d\\u0028\\u002e\\u0029/g, "\\u093c\\u093c\\u094d"],
+      [/\\u094d\\u0905/g, ""],
+      [/\\u094d\\u0914/g, "\\u094c"],
+      [/\\u094d\\u0910/g, "\\u0948"],
+      [/\\u094d\\u0906/g, "\\u093e"],
+      [/\\u094d\\u0908/g, "\\u0940"],
+      [/\\u094d\\u0907/g, "\\u093f"],
+      [/\\u094d\\u090a/g, "\\u0942"],
+      [/\\u094d\\u0909/g, "\\u0941"],
+      [/\\u094d\\u090d/g, "\\u0945"],
+      [/\\u094d\\u090f/g, "\\u0947"],
+      [/\\u094d\\u0911/g, "\\u0949"],
+      [/\\u094d\\u0913/g, "\\u094b"],
+      [/\\u094d\\u090b/g, "\\u0943"],
+      [/\\u094d\\u0960/g, "\\u0944"],
+      [/\\u094d\\u090c/g, "\\u0962"],
+      [/\\u094d\\u0961/g, "\\u0963"],
+      [/\\u004d\\u004d\\u004d/g, "\\u0902"],
+      [/\\u004d\\u004d/g, "\\u0901"],
+      [/\\u004d/g, "\\u0902"],
+      [/\\u0048/g, "\\u0903"],
+      [/\\u0027/g, "\\u093d"],
+      [/\\u007c/g, "\\u0964"],
+      [/\\u0964\\u0964/g, "\\u0965"],
+      [/\\u0030/g, "\\u0966"],[/\\u0031/g, "\\u0967"],[/\\u0032/g, "\\u0968"],[/\\u0033/g, "\\u0969"],[/\\u0034/g, "\\u096a"],
+      [/\\u0035/g, "\\u096b"],[/\\u0036/g, "\\u096c"],[/\\u0037/g, "\\u096d"],[/\\u0038/g, "\\u096e"],[/\\u0039/g, "\\u096f"],
+      [/\\u0023/g, ""],
+    ];
+
+    const GUJ_PAIRS = [
+      [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0ad0"],
+      [/\\u0061\\u0069/g, "\\u0a90"],
+      [/\\u0061\\u0075/g, "\\u0a94"],
+      [/\\u0061/g, "\\u0a85"],
+      [/\\u0041/g, "\\u0a86"],
+      [/\\u0069/g, "\\u0a87"],
+      [/\\u0049/g, "\\u0a88"],
+      [/\\u0075/g, "\\u0a89"],
+      [/\\u0055/g, "\\u0a8a"],
+      [/\\u0065/g, "\\u0a8f"],
+      [/\\u006f/g, "\\u0a93"],
+      [/\\u002d\\u0072/g, "\\u0a8b"],
+      [/\\u002d\\u0052/g, "\\u0ae0"],
+      [/\\u002d\\u006c/g, "\\u0a8c"],
+      [/\\u002d\\u004c/g, "\\u0ae1"],
+      [/\\u0028\\u0045\\u0029/g, "\\u0a8d"],
+      [/\\u0028\\u004f\\u0029/g, "\\u0a91"],
+      [/\\u006b\\u0068/g, "\\u0a96\\u0acd"],
+      [/\\u0067\\u0068/g, "\\u0a98\\u0acd"],
+      [/\\u0043\\u0068/g, "\\u0a9b\\u0acd"],
+      [/\\u0063\\u0068/g, "\\u0a9a\\u0acd"],
+      [/\\u007a\\u0068/g, "\\u0af9\\u0acd"],
+      [/\\u006a\\u0068/g, "\\u0a9d\\u0acd"],
+      [/\\u0054\\u0068/g, "\\u0aa0\\u0acd"],
+      [/\\u0044\\u0068/g, "\\u0aa2\\u0acd"],
+      [/\\u0074\\u0068/g, "\\u0aa5\\u0acd"],
+      [/\\u0064\\u0068/g, "\\u0aa7\\u0acd"],
+      [/\\u0070\\u0068/g, "\\u0aab\\u0acd"],
+      [/\\u0062\\u0068/g, "\\u0aad\\u0acd"],
+      [/\\u006b/g, "\\u0a95\\u0acd"],
+      [/\\u0067/g, "\\u0a97\\u0acd"],
+      [/\\u0047/g, "\\u0a99\\u0acd"],
+      [/\\u006a/g, "\\u0a9c\\u0acd"],
+      [/\\u004a/g, "\\u0a9e\\u0acd"],
+      [/\\u0054/g, "\\u0a9f\\u0acd"],
+      [/\\u0044/g, "\\u0aa1\\u0acd"],
+      [/\\u004e/g, "\\u0aa3\\u0acd"],
+      [/\\u0074/g, "\\u0aa4\\u0acd"],
+      [/\\u0064/g, "\\u0aa6\\u0acd"],
+      [/\\u006e/g, "\\u0aa8\\u0acd"],
+      [/\\u0070/g, "\\u0aaa\\u0acd"],
+      [/\\u0062/g, "\\u0aac\\u0acd"],
+      [/\\u006d/g, "\\u0aae\\u0acd"],
+      [/\\u0079/g, "\\u0aaf\\u0acd"],
+      [/\\u0072/g, "\\u0ab0\\u0acd"],
+      [/\\u006c/g, "\\u0ab2\\u0acd"],
+      [/\\u004c/g, "\\u0ab3\\u0acd"],
+      [/\\u0076/g, "\\u0ab5\\u0acd"],
+      [/\\u0053\\u0068/g, "\\u0ab7\\u0acd"],
+      [/\\u0073\\u0068/g, "\\u0ab6\\u0acd"],
+      [/\\u0073/g, "\\u0ab8\\u0acd"],
+      [/\\u0068/g, "\\u0ab9\\u0acd"],
+      [/\\u0abc\\u0acd\\u0028\\u002e\\u0029/g, "\\u0abc\\u0abc\\u0acd"],
+      [/\\u0acd\\u0a85/g, ""],
+      [/\\u0acd\\u0a94/g, "\\u0acc"],
+      [/\\u0acd\\u0a90/g, "\\u0ac8"],
+      [/\\u0acd\\u0a86/g, "\\u0abe"],
+      [/\\u0acd\\u0a88/g, "\\u0ac0"],
+      [/\\u0acd\\u0a87/g, "\\u0abf"],
+      [/\\u0acd\\u0a8a/g, "\\u0ac2"],
+      [/\\u0acd\\u0a89/g, "\\u0ac1"],
+      [/\\u0acd\\u0a8d/g, "\\u0ac5"],
+      [/\\u0acd\\u0a8f/g, "\\u0ac7"],
+      [/\\u0acd\\u0a91/g, "\\u0ac9"],
+      [/\\u0acd\\u0a93/g, "\\u0acb"],
+      [/\\u0acd\\u0a8b/g, "\\u0ac3"],
+      [/\\u0acd\\u0ae0/g, "\\u0ac4"],
+      [/\\u0acd\\u0a8c/g, "\\u0ae2"],
+      [/\\u0acd\\u0ae1/g, "\\u0ae3"],
+      [/\\u004d\\u004d\\u004d/g, "\\u0a82"],
+      [/\\u004d\\u004d/g, "\\u0a81"],
+      [/\\u004d/g, "\\u0a82"],
+      [/\\u0048/g, "\\u0a83"],
+      [/\\u0027/g, "\\u0abd"],
+      [/\\u007c/g, "\\u0964"],
+      [/\\u0964\\u0964/g, "\\u0965"],
+      [/\\u0030/g, "\\u0ae6"],[/\\u0031/g, "\\u0ae7"],[/\\u0032/g, "\\u0ae8"],[/\\u0033/g, "\\u0ae9"],[/\\u0034/g, "\\u0aea"],
+      [/\\u0035/g, "\\u0aeb"],[/\\u0036/g, "\\u0aec"],[/\\u0037/g, "\\u0aed"],[/\\u0038/g, "\\u0aee"],[/\\u0039/g, "\\u0aef"],
+      [/\\u0023/g, ""],
+    ];
+
+    const TEL_PAIRS = [
+      [/\\u0028\\u004f\\u004d\\u0029/g, "\\u0c13\\u0c02"],
+      [/\\u0061\\u0069/g, "\\u0c10"],
+      [/\\u0061\\u0075/g, "\\u0c14"],
+      [/\\u0061/g, "\\u0c05"],
+      [/\\u0041/g, "\\u0c06"],
+      [/\\u0069/g, "\\u0c07"],
+      [/\\u0049/g, "\\u0c08"],
+      [/\\u0075/g, "\\u0c09"],
+      [/\\u0055/g, "\\u0c0a"],
+      [/\\u0065/g, "\\u0c0f"],
+      [/\\u006f/g, "\\u0c13"],
+      [/\\u002d\\u0072/g, "\\u0c0b"],
+      [/\\u002d\\u0052/g, "\\u0c60"],
+      [/\\u002d\\u006c/g, "\\u0c0c"],
+      [/\\u002d\\u004c/g, "\\u0c61"],
+      [/\\u0028\\u0045\\u0029/g, "\\u0c0d"],
+      [/\\u0028\\u004f\\u0029/g, "\\u0c11"],
+      [/\\u006b\\u0068/g, "\\u0c16\\u0c4d"],
+      [/\\u0067\\u0068/g, "\\u0c18\\u0c4d"],
+      [/\\u0043\\u0068/g, "\\u0c1b\\u0c4d"],
+      [/\\u0063\\u0068/g, "\\u0c1a\\u0c4d"],
+      [/\\u007a\\u0068/g, "\\u0c79\\u0c4d"],
+      [/\\u006a\\u0068/g, "\\u0c1d\\u0c4d"],
+      [/\\u0054\\u0068/g, "\\u0c20\\u0c4d"],
+      [/\\u0044\\u0068/g, "\\u0c22\\u0c4d"],
+      [/\\u0074\\u0068/g, "\\u0c25\\u0c4d"],
+      [/\\u0064\\u0068/g, "\\u0c27\\u0c4d"],
+      [/\\u0070\\u0068/g, "\\u0c2b\\u0c4d"],
+      [/\\u0062\\u0068/g, "\\u0c2d\\u0c4d"],
+      [/\\u006b/g, "\\u0c15\\u0c4d"],
+      [/\\u0067/g, "\\u0c17\\u0c4d"],
+      [/\\u0047/g, "\\u0c19\\u0c4d"],
+      [/\\u006a/g, "\\u0c1c\\u0c4d"],
+      [/\\u004a/g, "\\u0c1e\\u0c4d"],
+      [/\\u0054/g, "\\u0c1f\\u0c4d"],
+      [/\\u0044/g, "\\u0c21\\u0c4d"],
+      [/\\u004e/g, "\\u0c23\\u0c4d"],
+      [/\\u0074/g, "\\u0c24\\u0c4d"],
+      [/\\u0064/g, "\\u0c26\\u0c4d"],
+      [/\\u006e/g, "\\u0c28\\u0c4d"],
+      [/\\u0070/g, "\\u0c2a\\u0c4d"],
+      [/\\u0062/g, "\\u0c2c\\u0c4d"],
+      [/\\u006d/g, "\\u0c2e\\u0c4d"],
+      [/\\u0079/g, "\\u0c2f\\u0c4d"],
+      [/\\u0072/g, "\\u0c30\\u0c4d"],
+      [/\\u006c/g, "\\u0c32\\u0c4d"],
+      [/\\u004c/g, "\\u0c33\\u0c4d"],
+      [/\\u0076/g, "\\u0c35\\u0c4d"],
+      [/\\u0053\\u0068/g, "\\u0c37\\u0c4d"],
+      [/\\u0073\\u0068/g, "\\u0c36\\u0c4d"],
+      [/\\u0073/g, "\\u0c38\\u0c4d"],
+      [/\\u0068/g, "\\u0c39\\u0c4d"],
+      [/\\u0c4d\\u0028\\u002e\\u0029/g, "\\u0c3c\\u0c4d"],
+      [/\\u0c3c\\u0c4d\\u0028\\u002e\\u0029/g, "\\u0c3c\\u0c3c\\u0c4d"],
+      [/\\u0c4d\\u0c05/g, ""],
+      [/\\u0c4d\\u0c14/g, "\\u0c4c"],
+      [/\\u0c4d\\u0c10/g, "\\u0c48"],
+      [/\\u0c4d\\u0c06/g, "\\u0c3e"],
+      [/\\u0c4d\\u0c08/g, "\\u0c40"],
+      [/\\u0c4d\\u0c07/g, "\\u0c3f"],
+      [/\\u0c4d\\u0c0a/g, "\\u0c42"],
+      [/\\u0c4d\\u0c09/g, "\\u0c41"],
+      [/\\u0c4d\\u0c0d/g, "\\u0c45"],
+      [/\\u0c4d\\u0c0f/g, "\\u0c47"],
+      [/\\u0c4d\\u0c11/g, "\\u0c49"],
+      [/\\u0c4d\\u0c13/g, "\\u0c4b"],
+      [/\\u0c4d\\u0c0b/g, "\\u0c43"],
+      [/\\u0c4d\\u0c60/g, "\\u0c44"],
+      [/\\u0c4d\\u0c0c/g, "\\u0c62"],
+      [/\\u0c4d\\u0c61/g, "\\u0c63"],
+      [/\\u004d\\u004d\\u004d/g, "\\u0c02"],
+      [/\\u004d\\u004d/g, "\\u0c01"],
+      [/\\u004d/g, "\\u0c02"],
+      [/\\u0048/g, "\\u0c03"],
+      [/\\u0027/g, "\\u0c3d"],
+      [/\\u007c/g, "\\u0964"],
+      [/\\u0964\\u0964/g, "\\u0965"],
+      [/\\u0030/g, "\\u0c66"],[/\\u0031/g, "\\u0c67"],[/\\u0032/g, "\\u0c68"],[/\\u0033/g, "\\u0c69"],[/\\u0034/g, "\\u0c6a"],
+      [/\\u0035/g, "\\u0c6b"],[/\\u0036/g, "\\u0c6c"],[/\\u0037/g, "\\u0c6d"],[/\\u0038/g, "\\u0c6e"],[/\\u0039/g, "\\u0c6f"],
+      [/\\u0023/g, ""],
+    ];
+
+    const IAST_PAIRS = [
+      [/\\u0023\\u0028\\u004f\\u004d\\u0029/g, "Oṃ"],
+      [/\\u0028\\u004f\\u004d\\u0029/g, "oṃ"],
+      [/\\u0023\\u0061\\u0069/g, "Ai"],[/\\u0061\\u0069/g, "ai"],
+      [/\\u0023\\u0061\\u0075/g, "Au"],[/\\u0061\\u0075/g, "au"],
+      [/\\u0023\\u0041/g, "Ā"],[/\\u0041/g, "ā"],
+      [/\\u0023\\u0061/g, "A"],[/\\u0061/g, "a"],
+      [/\\u0023\\u0049/g, "Ī"],[/\\u0049/g, "ī"],
+      [/\\u0023\\u0069/g, "I"],[/\\u0069/g, "i"],
+      [/\\u0023\\u0055/g, "Ū"],[/\\u0055/g, "ū"],
+      [/\\u0023\\u0075/g, "U"],[/\\u0075/g, "u"],
+      [/\\u0023\\u0065/g, "E"],[/\\u0065/g, "e"],
+      [/\\u0023\\u006f/g, "O"],[/\\u006f/g, "o"],
+      [/\\u0023\\u002d\\u0072/g, "Ṛ"],[/\\u002d\\u0072/g, "ṛ"],
+      [/\\u0023\\u002d\\u0052/g, "Ṝ"],[/\\u002d\\u0052/g, "ṝ"],
+      [/\\u0023\\u002d\\u006c/g, "Ḷ"],[/\\u002d\\u006c/g, "ḷ"],
+      [/\\u0023\\u002d\\u004c/g, "Ḹ"],[/\\u002d\\u004c/g, "ḹ"],
+      [/\\u0023\\u0028\\u0045\\u0029/g, "Æ"],[/\\u0028\\u0045\\u0029/g, "æ"],
+      [/\\u0023\\u0028\\u004f\\u0029/g, "Ô"],[/\\u0028\\u004f\\u0029/g, "ô"],
+      [/\\u0023\\u006b\\u0068/g, "Kh"],[/\\u006b\\u0068/g, "kh"],
+      [/\\u0023\\u006b/g, "K"],[/\\u006b/g, "k"],
+      [/\\u0023\\u0067\\u0068/g, "Gh"],[/\\u0067\\u0068/g, "gh"],
+      [/\\u0023\\u0067/g, "G"],[/\\u0067/g, "g"],
+      [/\\u0023\\u0047/g, "Ṅ"],[/\\u0047/g, "ṅ"],
+      [/\\u0023\\u0043\\u0068/g, "Ch"],[/\\u0043\\u0068/g, "ch"],
+      [/\\u0023\\u0063\\u0068/g, "C"],[/\\u0063\\u0068/g, "c"],
+      [/\\u0023\\u006a\\u0068/g, "Jh"],[/\\u006a\\u0068/g, "jh"],
+      [/\\u0023\\u007a\\u0068/g, "Ẓ"],[/\\u007a\\u0068/g, "ẓ"],
+      [/\\u0023\\u006a/g, "J"],[/\\u006a/g, "j"],
+      [/\\u0023\\u004a/g, "Ñ"],[/\\u004a/g, "ñ"],
+      [/\\u0023\\u0054\\u0068/g, "Ṭh"],[/\\u0054\\u0068/g, "ṭh"],
+      [/\\u0023\\u0054/g, "Ṭ"],[/\\u0054/g, "ṭ"],
+      [/\\u0023\\u0044\\u0068/g, "Ḍh"],[/\\u0044\\u0068/g, "ḍh"],
+      [/\\u0023\\u0044/g, "Ḍ"],[/\\u0044/g, "ḍ"],
+      [/\\u0023\\u004e/g, "Ṇ"],[/\\u004e/g, "ṇ"],
+      [/\\u0023\\u0074\\u0068/g, "Th"],[/\\u0074\\u0068/g, "th"],
+      [/\\u0023\\u0074/g, "T"],[/\\u0074/g, "t"],
+      [/\\u0023\\u0064\\u0068/g, "Dh"],[/\\u0064\\u0068/g, "dh"],
+      [/\\u0023\\u0064/g, "D"],[/\\u0064/g, "d"],
+      [/\\u0023\\u006e/g, "N"],[/\\u006e/g, "n"],
+      [/\\u0023\\u0070\\u0068/g, "Ph"],[/\\u0070\\u0068/g, "ph"],
+      [/\\u0023\\u0070/g, "P"],[/\\u0070/g, "p"],
+      [/\\u0023\\u0062\\u0068/g, "Bh"],[/\\u0062\\u0068/g, "bh"],
+      [/\\u0023\\u0062/g, "B"],[/\\u0062/g, "b"],
+      [/\\u0023\\u006d/g, "M"],[/\\u006d/g, "m"],
+      [/\\u0023\\u0079/g, "Y"],[/\\u0079/g, "y"],
+      [/\\u0023\\u0072/g, "R"],[/\\u0072/g, "r"],
+      [/\\u0023\\u006c/g, "L"],[/\\u006c/g, "l"],
+      [/\\u0023\\u004c/g, "Ḻ"],[/\\u004c/g, "ḻ"],
+      [/\\u0023\\u0076/g, "V"],[/\\u0076/g, "v"],
+      [/\\u0023\\u0053\\u0068/g, "Ṣ"],[/\\u0053\\u0068/g, "ṣ"],
+      [/\\u0023\\u0073\\u0068/g, "Ś"],[/\\u0073\\u0068/g, "ś"],
+      [/\\u0023\\u0073/g, "S"],[/\\u0073/g, "s"],
+      [/\\u0023\\u0068/g, "H"],[/\\u0068/g, "h"],
+      [/\\u004d\\u004d\\u004d/g, "\u0303"],
+      [/\\u0023\\u004d\\u004d/g, "M̐"],[/\\u004d\\u004d/g, "m̐"],
+      [/\\u0023\\u004d/g, "Ṃ"],[/\\u004d/g, "ṃ"],
+      [/\\u0023\\u0048/g, "Ḥ"],[/\\u0048/g, "ḥ"],
+      [/\\u0028\\u002e\\u0029/g, "\u0323"],
+      [/\\u0027/g, "'"],
+    ];
+
+    // ===== DOM-dependent code =====
+    document.addEventListener('DOMContentLoaded', () => {
+      const $ = (id) => document.getElementById(id);
+
+      const renderAll = (raw) => {
+        const hex = toUni(raw);
+        const smart = applySmart(hex);
+        const outDevan = $('TransDevan');
+        const outGujar = $('TransGujar');
+        const outTelug = $('TransTelug');
+        const outIAST  = $('TransIAST');
+        if (outDevan) outDevan.value = fromUni(replacePairs(smart, DEVAN_PAIRS));
+        if (outGujar) outGujar.value = fromUni(replacePairs(smart, GUJ_PAIRS));
+        if (outTelug) outTelug.value = fromUni(replacePairs(smart, TEL_PAIRS));
+        if (outIAST)  outIAST.value  = fromUni(replacePairs(hex, IAST_PAIRS)); // IAST keeps ASCII digits
+      };
+
+      const debounce = (fn, delay = 20) => { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); }; };
+
+      const inputEl = $('TransInput');
+      if (inputEl) inputEl.addEventListener('input', debounce((e) => { renderAll(e.target.value); }, 10));
+
+      // Modern copy fallback that works without selecting text
+      document.querySelectorAll('button[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-copy');
+          const src = id ? $(id) : null;
+          const text = src ? src.value : '';
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              const ta = document.createElement('textarea');
+              ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+            }
+            btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1200);
+          } catch {
+            btn.textContent = 'Copy failed'; setTimeout(() => btn.textContent = 'Copy', 1200);
+          }
+        });
+      });
+
+      const clearBtn = $('clearBtn');
+      if (clearBtn && inputEl) clearBtn.addEventListener('click', () => { inputEl.value = ''; renderAll(''); inputEl.focus(); });
+
+      // ===== Resizable 2x2 grid gutters (zoom-safe) =====
+      const grid = $('OutputGrid');
+      const v = $('VGutter');
+      const h = $('HGutter');
+      if (!grid || !v || !h) {
+        console.error('Resizable grid init skipped: required elements not found.', { grid: !!grid, v: !!v, h: !!h });
+      } else {
+        const G = 8, MIN = 100;
+        const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+        // Maintain ratios so resizing/zoom keeps panes in view
+        let ratioX = 0.5; // left column ratio (of available width)
+        let ratioY = 0.5; // top row ratio (of available height)
+
+        const setColsPx = (w) => {
+          const avail = Math.max(0, w - G);
+          const c1 = Math.max(MIN, avail * ratioX);
+          const c2 = Math.max(MIN, avail - c1);
+          grid.style.setProperty('--c1', c1 + 'px');
+          grid.style.setProperty('--c2', c2 + 'px');
+        };
+        const setRowsPx = (h) => {
+          const avail = Math.max(0, h - G);
+          const r1 = Math.max(MIN, avail * ratioY);
+          const r2 = Math.max(MIN, avail - r1);
+          grid.style.setProperty('--r1', r1 + 'px');
+          grid.style.setProperty('--r2', r2 + 'px');
+        };
+        const layoutFromBox = () => {
+          const r = grid.getBoundingClientRect();
+          setColsPx(r.width);
+          setRowsPx(r.height);
+        };
+        layoutFromBox();
+
+        // Recompute on window resize and when the grid box size changes (covers zoom events)
+        let pending = false;
+        const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; layoutFromBox(); }); } };
+        window.addEventListener('resize', schedule);
+        if (window.ResizeObserver) {
+          const ro = new ResizeObserver(schedule);
+          ro.observe(grid);
+        }
+
+        v.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          const r = grid.getBoundingClientRect(); const w = r.width; const left = r.left;
+          const onMove = (ev) => {
+            const x = clamp(ev.clientX - left, MIN, w - MIN);
+            const avail = Math.max(0, w - G);
+            ratioX = clamp((x - G/2) / avail, 0.0, 1.0);
+            setColsPx(w);
+          };
+          const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+          window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
+        });
+        h.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          const r = grid.getBoundingClientRect(); const ht = r.height; const top = r.top;
+          const onMove = (ev) => {
+            const y = clamp(ev.clientY - top, MIN, ht - MIN);
+            const avail = Math.max(0, ht - G);
+            ratioY = clamp((y - G/2) / avail, 0.0, 1.0);
+            setRowsPx(ht);
+          };
+          const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+          window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
+        });
+      }
+
+      // Initial render
+      renderAll('');
+
+      // ===== Console self-tests =====
+      (function runSelfTests() {
+        const results = [];
+        const S = [
+          { raw: 'kha',  dev: 'ख',  guj: 'ખ',  tel: 'ఖ',  iast: 'kha' },
+          { raw: 'kI',   dev: 'की', guj: 'કી', tel: 'కీ', iast: 'kī' },
+          { raw: 'aH',   dev: 'अः', guj: 'અઃ', tel: 'అః', iast: 'aḥ' },
+          { raw: '(OM)', dev: 'ॐ',  guj: 'ૐ',  tel: 'ఓం', iast: 'oṃ' },
+          { raw: '123',  dev: '१२३', guj: '૧૨૩', tel: '౧౨౩', iast: '123' },
+        ];
+        S.forEach(t => {
+          const hex = applySmart(toUni(t.raw));
+          const gotDev = fromUni(replacePairs(hex, DEVAN_PAIRS));
+          const gotGuj = fromUni(replacePairs(hex, GUJ_PAIRS));
+          const gotTel = fromUni(replacePairs(hex, TEL_PAIRS));
+          const gotIA  = fromUni(replacePairs(toUni(t.raw), IAST_PAIRS));
+          results.push({ test: `DEV '${t.raw}'`, exp: t.dev, got: gotDev, pass: gotDev === t.dev });
+          results.push({ test: `GUJ '${t.raw}'`, exp: t.guj, got: gotGuj, pass: gotGuj === t.guj });
+          results.push({ test: `TEL '${t.raw}'`, exp: t.tel, got: gotTel, pass: gotTel === t.tel });
+          results.push({ test: `IA  '${t.raw}'`, exp: t.iast, got: gotIA,  pass: gotIA  === t.iast });
+        });
+        try { console.table(results); } catch { console.log(results); }
+        const failed = results.filter(r => !r.pass);
+        if (failed.length) console.warn(`Self-tests: ${failed.length} failure(s)`, failed);
+        else console.log('Self-tests: all passed');
+      })();
+    });
+  </script>
+</body>
 </html>
