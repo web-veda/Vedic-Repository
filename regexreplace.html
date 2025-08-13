@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regex Replacement Tool – Rules on Top</title>
+  <style>
+    :root {
+      --bg: #0f172a;       /* slate-900 */
+      --panel: #111827;    /* gray-900 */
+      --muted: #334155;    /* slate-600 */
+      --text: #e5e7eb;     /* gray-200 */
+      --accent: #22d3ee;   /* cyan-400 */
+      --accent-2: #60a5fa; /* blue-400 */
+      --danger: #f87171;   /* red-400 */
+      --ok: #34d399;       /* green-400 */
+      --border: #1f2937;   /* gray-800 */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --input-bg: #0b1220;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(96,165,250,0.15), transparent),
+                  radial-gradient(1000px 500px at -10% 10%, rgba(34,211,238,0.12), transparent),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    /* Core Layout */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* Consistent spacing between major sections */
+    }
+
+    header.app {
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(15,23,42,.9), rgba(15,23,42,.6) 60%, rgba(15,23,42,0));
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 { font-size: 22px; margin: 0; letter-spacing:.2px; }
+    h1 span { color: var(--accent); }
+
+    /* Controls */
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+      justify-content: center; /* Center buttons on mobile */
+    }
+    @media (min-width: 768px) {
+      .toolbar { justify-content: flex-start; }
+    }
+
+    .btn {
+      background: linear-gradient(180deg, #0ea5b7, #0891b2);
+      color: #001016; border: 0; padding: 10px 12px; border-radius: 10px; cursor: pointer; font-weight: 600;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      box-shadow: 0 5px 20px rgba(0,0,0,.4);
+      transform: translateY(-2px);
+    }
+    .btn.secondary { background: #1f2937; color: #d1d5db; }
+    .btn.ghost { background: transparent; border: 1px solid var(--border); color: #cbd5e1; }
+    .btn.warn { background: #7f1d1d; color: #fecaca; }
+    .btn:disabled { opacity:.6; cursor:not-allowed; transform: none; box-shadow: none; }
+
+    .switch { display: inline-flex; align-items: center; gap: 8px; user-select: none; }
+    .switch input { appearance: none; width: 42px; height: 24px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 999px; position: relative; outline: none; cursor: pointer; }
+    .switch input:checked { background: #0ea5b7; border-color: #0ea5b7; }
+    .switch input::after { content:""; position:absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 999px; transition: transform .2s ease; }
+    .switch input:checked::after { transform: translateX(18px); }
+
+    /* Panels */
+    .panel {
+      background: linear-gradient(180deg, rgba(2,6,23,.5), rgba(2,6,23,.2));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 0; /* Remove default padding to let the inner grid handle it */
+    }
+    .panel h2 {
+      font-size: 14px; font-weight: 700; letter-spacing:.3px; color:#cbd5e1;
+      margin: 0; padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(2,6,23,.85), rgba(2,6,23,.4));
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer;
+    }
+    .panel h2 .toggle-icon {
+      transition: transform 0.2s ease-in-out;
+    }
+    .panel.collapsed h2 .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    /* Collapsible content */
+    .collapsible-content {
+      max-height: 1000px; /* A large number to allow for smooth transition */
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+      padding: 14px;
+    }
+    .panel.collapsed .collapsible-content {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .panel.collapsed .summary {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    
+    textarea {
+      width: 100%; min-height: 220px; resize: vertical; padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 14px; line-height: 1.5; color: #e2e8f0;
+      background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px;
+    }
+
+    /* Rules Layout (TOP) */
+    .rules-wrap { display: grid; gap: 10px; }
+    .rules { display: grid; gap: 8px; }
+    .rule {
+      display: grid;
+      grid-template-columns: 24px 1fr 1fr auto;
+      gap: 8px; align-items: start;
+      padding: 10px; border: 1px solid var(--border); background: #0a1220; border-radius: 12px;
+    }
+    @media (max-width: 768px) {
+      .rule {
+        grid-template-columns: 1fr; /* Stack on smaller screens */
+        gap: 12px;
+      }
+      .rule .meta {
+        grid-row: 1; /* Move buttons to the top row */
+        grid-column: 1;
+        justify-self: end;
+      }
+    }
+    .rule .meta {
+      display:flex; align-items:center; gap:8px;
+    }
+    .fld { display: flex; flex-direction: column; gap: 6px; }
+    .fld label { font-size: 12px; color: #93c5fd; }
+    .fld input[type="text"] {
+      width: 100%; padding: 10px; background: var(--input-bg); color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px;
+      font-family: ui-monospace, monospace;
+    }
+
+    .flags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; color:#94a3b8; }
+    .flag {
+      display: inline-flex; gap: 6px; align-items: center; padding: 6px 8px;
+      background: var(--input-bg); border: 1px solid var(--border); border-radius: 999px;
+    }
+
+    .status { display: flex; gap: 10px; align-items: center; font-size: 12px; color: #cbd5e1; }
+    .status .ok { color: var(--ok); }
+    .status .err { color: var(--danger); }
+
+    .summary { padding: 10px 14px; font-size: 13px; color: #cbd5e1; border-top: 1px dashed var(--border); }
+
+    .icon-btn { background: #0b1220; border: 1px solid var(--border); color: #cbd5e1; padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
+    .icon-btn:hover { border-color: #334155; background: #1f2937; }
+
+    .row { display: grid; grid-template-columns: 1.5fr 1.5fr auto; gap: 8px; align-items: center; }
+    @media (max-width: 768px) {
+      .row { grid-template-columns: 1fr; }
+      .row .actions { justify-self: stretch; }
+      .row .btn { width: 100%; }
+    }
+
+    /* INPUT / OUTPUT BELOW RULES */
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr; /* Default to stacking */
+      gap: 14px;
+    }
+    @media (min-width: 980px) {
+      .panels {
+        grid-template-columns: 1fr 1fr; /* Side-by-side on large screens */
+      }
+    }
+    
+    .kbd { font-family: ui-monospace, monospace; font-size: 12px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; background: #0b1220; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <header class="app">
+    <div class="wrap">
+      <h1>🔧 <span>Regex</span> Replacement Tool</h1>
+      <div class="toolbar" role="group" aria-label="Main controls">
+        <button class="btn" id="btn-apply" title="Apply all rules (Ctrl/Cmd+Enter)">Apply</button>
+        <label class="switch" title="Automatically re-run when text or rules change">
+          <input type="checkbox" id="liveToggle" checked>
+          <span>Live update</span>
+        </label>
+        <button class="btn secondary" id="btn-copy" title="Copy output to clipboard">Copy Output</button>
+        <button class="btn secondary" id="btn-swap" title="Replace input with output">Swap In/Out</button>
+        <button class="btn ghost" id="btn-clear" title="Clear both text boxes">Clear</button>
+        <button class="btn ghost" id="btn-save" title="Save rules & text to this browser">Save</button>
+        <button class="btn ghost" id="btn-load" title="Load saved rules & text">Load</button>
+        <button class="btn warn" id="btn-reset" title="Remove all rules">Reset Rules</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- RULES ON TOP -->
+    <section class="panel rules-wrap" aria-labelledby="lbl-rules">
+      <h2 id="lbl-rules">Rules <span class="toggle-icon">▼</span></h2>
+      <div class="collapsible-content">
+        <div class="rules" id="rules"></div>
+        <div class="summary" id="summary">No rules applied yet.</div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="lbl-add">
+      <h2 id="lbl-add">Add Rule <span class="toggle-icon">▼</span></h2>
+      <div class="collapsible-content">
+        <div class="grid">
+          <div class="row">
+            <div class="fld">
+              <label for="newPattern">Pattern</label>
+              <input id="newPattern" type="text" placeholder="e.g. (foo)\\s+(bar)" />
+            </div>
+            <div class="fld">
+              <label for="newReplacement">Replacement</label>
+              <input id="newReplacement" type="text" placeholder="e.g. $1_$2 or \\n for newlines" />
+            </div>
+            <div class="actions" style="justify-self:end">
+              <button class="btn" id="btn-add">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p style="opacity:.8; font-size:12px; margin: 10px 0 16px;">Tip: Use <span class="kbd">$1</span>, <span class="kbd">$2</span>… for capture groups. Escapes like <span class="kbd">\n</span>, <span class="kbd">\t</span> are supported.</p>
+
+    <!-- INPUT / OUTPUT BELOW RULES -->
+    <section class="panels" aria-label="Text panels">
+      <div class="panel" aria-labelledby="lbl-input">
+        <h2 id="lbl-input">Input</h2>
+        <div class="grid">
+          <textarea id="inputText" placeholder="Paste input text here…" aria-label="Input text"></textarea>
+        </div>
+      </div>
+      <div class="panel" aria-labelledby="lbl-output">
+        <h2 id="lbl-output">Output</h2>
+        <div class="grid">
+          <textarea id="outputText" placeholder="Output will appear here…" aria-label="Output text" readonly></textarea>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="rule-template">
+    <div class="rule" role="group" aria-label="Regex rule">
+      <input class="enable" type="checkbox" title="Enable/disable" checked />
+
+      <div class="fld">
+        <label>Pattern</label>
+        <input class="pattern" type="text" placeholder="Regex pattern" />
+        <div class="flags">
+          <label class="flag" title="Global"><input type="checkbox" data-flag="g" checked /> g</label>
+          <label class="flag" title="Case-insensitive"><input type="checkbox" data-flag="i" /> i</label>
+          <label class="flag" title="Multiline ^$"><input type="checkbox" data-flag="m" /> m</label>
+          <label class="flag" title="DotAll (.) matches newlines"><input type="checkbox" data-flag="s" /> s</label>
+          <label class="flag" title="Unicode"><input type="checkbox" data-flag="u" checked /> u</label>
+          <label class="flag" title="Sticky (advanced)"><input type="checkbox" data-flag="y" /> y</label>
+        </div>
+      </div>
+
+      <div class="fld">
+        <label>Replacement</label>
+        <input class="replacement" type="text" placeholder="Replacement e.g. $1, text, \\n" />
+        <div class="status"><span class="count">—</span><span class="msg"></span></div>
+      </div>
+
+      <div class="meta">
+        <button class="icon-btn up" title="Move up" aria-label="Move up">⬆️</button>
+        <button class="icon-btn down" title="Move down" aria-label="Move down">⬇️</button>
+        <button class="icon-btn duplicate" title="Duplicate" aria-label="Duplicate">🧬</button>
+        <button class="icon-btn remove" title="Remove" aria-label="Remove">✖</button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    // --- Utilities
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    function serializeRules() {
+      return $$('#rules .rule').map(rule => ({
+        enabled: $('.enable', rule).checked,
+        pattern: $('.pattern', rule).value,
+        replacement: $('.replacement', rule).value,
+        flags: $$('.flags input[type="checkbox"]', rule).filter(cb => cb.checked).map(cb => cb.dataset.flag).join('')
+      }));
+    }
+
+    function restoreRules(data) {
+      $('#rules').innerHTML = '';
+      (data || []).forEach(r => addRule(r.pattern, r.replacement, r.flags || 'gu', r.enabled !== false));
+      if (!data || data.length === 0) addRule('', '', 'gu', true);
+      compute();
+    }
+
+    // Helper function to escape common sequences in the replacement string
+    function escapeSequences(str) {
+      return str
+        .replace(/\\n/g, '\n')
+        .replace(/\\t/g, '\t')
+        .replace(/\\r/g, '\r')
+        .replace(/\\f/g, '\f')
+        .replace(/\\v/g, '\v')
+        .replace(/\\\$/g, '$');
+    }
+
+    // Helper to safely create a RegExp object
+    function tryRegex(pattern, flags) {
+      try {
+        return { ok: true, value: new RegExp(pattern, flags) };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+
+    // --- Rule row creation and event handling
+    function setupRuleEvents(node) {
+      // Get all interactive elements within the rule node
+      const enable = $('.enable', node);
+      const pat = $('.pattern', node);
+      const rep = $('.replacement', node);
+
+      // Add event listeners to trigger computation on input change
+      $$('.flags input', node).forEach(cb => cb.addEventListener('change', compute));
+      [enable, pat, rep].forEach(el => el.addEventListener('input', compute));
+
+      // Button actions
+      $('.up', node).onclick = () => {
+        const prev = node.previousElementSibling;
+        if (prev) node.parentNode.insertBefore(node, prev);
+        compute();
+      };
+      $('.down', node).onclick = () => {
+        const next = node.nextElementSibling;
+        if (next) node.parentNode.insertBefore(next, node);
+        compute();
+      };
+      $('.duplicate', node).onclick = () => {
+        const clone = node.cloneNode(true);
+        $('#rules').insertBefore(clone, node.nextSibling);
+        setupRuleEvents(clone); // Setup events for the new clone
+        compute();
+      };
+      $('.remove', node).onclick = () => {
+        node.remove();
+        compute();
+      };
+    }
+
+    function addRule(pattern = '', replacement = '', flags = 'gu', enabled = true) {
+      const tpl = $('#rule-template');
+      const node = tpl.content.firstElementChild.cloneNode(true);
+
+      // Set initial values
+      $('.enable', node).checked = enabled;
+      $('.pattern', node).value = pattern;
+      $('.replacement', node).value = replacement;
+      $$('.flags input', node).forEach(cb => cb.checked = flags.includes(cb.dataset.flag));
+      
+      // Setup event listeners for the new rule node
+      setupRuleEvents(node);
+      
+      $('#rules').appendChild(node);
+      compute();
+    }
+
+    // --- Application engine
+    function applyAll(text, rules) {
+      let current = text;
+      const report = [];
+
+      rules.forEach((r, idx) => {
+        const ruleEl = $$('#rules .rule')[idx];
+        const msg = $('.msg', ruleEl);
+        const cnt = $('.count', ruleEl);
+        
+        // Reset status messages
+        msg.textContent = '';
+        msg.className = 'msg';
+        cnt.textContent = `#${idx + 1}`;
+
+        if (!r.enabled) {
+          msg.textContent = 'skipped';
+          report.push({ idx, ok: true, skipped: true, count: 0 });
+          return; // skip disabled rule
+        }
+        
+        const flags = r.flags || '';
+
+        const { ok, value: regex, error } = tryRegex(r.pattern, flags);
+
+        if (!ok) {
+          msg.textContent = error;
+          msg.className = 'msg err';
+          report.push({ idx, ok: false, error });
+          return; // skip bad rule
+        }
+        
+        try {
+          const replacement = escapeSequences(r.replacement);
+          let count = 0;
+
+          if (flags.includes('g')) {
+            const matches = [...current.matchAll(regex)];
+            count = matches.length;
+          } else {
+            const match = regex.exec(current);
+            if (match) {
+              count = 1;
+            }
+          }
+          
+          current = current.replace(regex, replacement);
+
+          msg.textContent = count === 0 ? 'no matches' : `${count} replacement${count !== 1 ? 's' : ''}`;
+          msg.className = count > 0 ? 'msg ok' : 'msg';
+          report.push({ idx, ok: true, count });
+
+        } catch (e) {
+          msg.textContent = `Replacement error: ${e.message}`;
+          msg.className = 'msg err';
+          report.push({ idx, ok: false, error: e.message });
+        }
+      });
+
+      return { text: current, report };
+    }
+
+    // --- Live compute & summary
+    const live = $('#liveToggle');
+    const inputText = $('#inputText');
+    const outputText = $('#outputText');
+    const summary = $('#summary');
+
+    function compute(force = false) {
+      if (!live.checked && !force) return;
+      const rules = serializeRules();
+      const { text, report } = applyAll(inputText.value, rules);
+      outputText.value = text;
+      const total = report.filter(r => r.ok).reduce((a, r) => a + (r.count || 0), 0);
+      summary.textContent = `${report.length} rule(s) processed, ${total} total replacement${total===1?'':'s'}.`;
+      sessionStorage.setItem('regex:rules', JSON.stringify(rules));
+      sessionStorage.setItem('regex:input', inputText.value);
+      sessionStorage.setItem('regex:output', outputText.value);
+    }
+
+    // --- Buttons
+    $('#btn-apply').onclick = () => compute(true);
+    $('#btn-copy').onclick = async () => { try { await document.execCommand('copy'); toast('Output copied'); } catch { toast('Copy failed'); } };
+    $('#btn-swap').onclick = () => { inputText.value = outputText.value; compute(true); };
+    $('#btn-clear').onclick = () => { inputText.value = ''; outputText.value = ''; compute(true); };
+    $('#btn-save').onclick = () => { localStorage.setItem('regex:save', JSON.stringify({ rules: serializeRules(), input: inputText.value })); toast('Saved to browser'); };
+    $('#btn-load').onclick = () => {
+      const saved = localStorage.getItem('regex:save');
+      if (!saved) return toast('Nothing saved yet');
+      const parsed = JSON.parse(saved);
+      restoreRules(parsed.rules || []);
+      inputText.value = parsed.input || '';
+      compute(true);
+      toast('Loaded');
+    };
+    $('#btn-reset').onclick = () => { restoreRules([]); toast('Rules reset'); };
+
+    // keyboard shortcut: Ctrl/Cmd + Enter to Apply
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); compute(true); }
+    });
+
+    live.addEventListener('change', () => compute(true));
+    inputText.addEventListener('input', () => compute());
+
+    function toast(message) {
+      const t = document.createElement('div');
+      t.textContent = message;
+      t.style.position = 'fixed'; t.style.bottom = '20px'; t.style.left = '50%'; t.style.transform = 'translateX(-50%)';
+      t.style.background = '#0ea5b7'; t.style.color = '#001016'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.boxShadow = 'var(--shadow)';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 1500);
+    }
+
+    function togglePanel(panelEl) {
+      panelEl.classList.toggle('collapsed');
+    }
+
+    // --- Initial load: restore session or add one blank rule
+    (function init() {
+      const savedRules = sessionStorage.getItem('regex:rules');
+      if (savedRules) {
+        restoreRules(JSON.parse(savedRules));
+        inputText.value = sessionStorage.getItem('regex:input') || '';
+        outputText.value = sessionStorage.getItem('regex:output') || '';
+        compute(true);
+      } else {
+        addRule('', '', 'gu', true);
+      }
+      
+      // Add event listeners for collapsing panels
+      $$('.panel h2').forEach(h2 => {
+        h2.addEventListener('click', () => {
+          const panel = h2.closest('.panel');
+          if (panel) togglePanel(panel);
+        });
+      });
+    })();
+
+    // --- Add rule form
+    $('#btn-add').onclick = () => {
+      const p = $('#newPattern').value;
+      const r = $('#newReplacement').value;
+      addRule(p, r, 'gu', true);
+      $('#newPattern').value = '';
+      $('#newReplacement').value = '';
+      $('#newPattern').focus();
+    };
+  </script>
+</body>
+</html>
